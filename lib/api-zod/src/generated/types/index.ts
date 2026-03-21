@@ -6,4 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./clearMessages200";
 export * from "./healthStatus";
+export * from "./message";
+export * from "./messageRole";
+export * from "./sendMessageRequest";

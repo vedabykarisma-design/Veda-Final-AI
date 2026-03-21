@@ -8,3 +8,25 @@
 export interface HealthStatus {
   status: string;
 }
+
+export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole];
+
+export const MessageRole = {
+  user: "user",
+  assistant: "assistant",
+} as const;
+
+export interface Message {
+  id: string;
+  role: MessageRole;
+  content: string;
+  timestamp: string;
+}
+
+export interface SendMessageRequest {
+  content: string;
+}
+
+export type ClearMessages200 = {
+  success: boolean;
+};

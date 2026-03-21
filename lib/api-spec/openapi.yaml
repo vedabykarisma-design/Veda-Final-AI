@@ -1,6 +1,5 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
   description: API specification
@@ -10,6 +9,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: chat
+    description: Chat operations
 paths:
   /healthz:
     get:
@@ -24,6 +25,57 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /chat/messages:
+    get:
+      operationId: getMessages
+      tags: [chat]
+      summary: Get all messages
+      description: Returns list of chat messages
+      responses:
+        "200":
+          description: Messages list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+    post:
+      operationId: sendMessage
+      tags: [chat]
+      summary: Send a message
+      description: Send a new chat message and get AI reply
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        "200":
+          description: AI reply
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+  /chat/messages/clear:
+    post:
+      operationId: clearMessages
+      tags: [chat]
+      summary: Clear all messages
+      description: Clears all chat history
+      responses:
+        "200":
+          description: Cleared
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                  - success
 components:
   schemas:
     HealthStatus:
@@ -33,4 +85,27 @@ components:
           type: string
       required:
         - status
-
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        timestamp:
+          type: string
+      required:
+        - id
+        - role
+        - content
+        - timestamp
+    SendMessageRequest:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content

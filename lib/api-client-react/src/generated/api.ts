@@ -5,18 +5,26 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  ClearMessages200,
+  HealthStatus,
+  Message,
+  SendMessageRequest,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -99,3 +107,248 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Returns list of chat messages
+ * @summary Get all messages
+ */
+export const getGetMessagesUrl = () => {
+  return `/api/chat/messages`;
+};
+
+export const getMessages = async (
+  options?: RequestInit,
+): Promise<Message[]> => {
+  return customFetch<Message[]>(getGetMessagesUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetMessagesQueryKey = () => {
+  return [`/api/chat/messages`] as const;
+};
+
+export const getGetMessagesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMessages>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getMessages>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMessagesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMessages>>> = ({
+    signal,
+  }) => getMessages({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMessages>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetMessagesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMessages>>
+>;
+export type GetMessagesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get all messages
+ */
+
+export function useGetMessages<
+  TData = Awaited<ReturnType<typeof getMessages>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getMessages>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetMessagesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Send a new chat message and get AI reply
+ * @summary Send a message
+ */
+export const getSendMessageUrl = () => {
+  return `/api/chat/messages`;
+};
+
+export const sendMessage = async (
+  sendMessageRequest: SendMessageRequest,
+  options?: RequestInit,
+): Promise<Message> => {
+  return customFetch<Message>(getSendMessageUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(sendMessageRequest),
+  });
+};
+
+export const getSendMessageMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendMessage>>,
+    TError,
+    { data: BodyType<SendMessageRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sendMessage>>,
+  TError,
+  { data: BodyType<SendMessageRequest> },
+  TContext
+> => {
+  const mutationKey = ["sendMessage"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sendMessage>>,
+    { data: BodyType<SendMessageRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return sendMessage(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SendMessageMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sendMessage>>
+>;
+export type SendMessageMutationBody = BodyType<SendMessageRequest>;
+export type SendMessageMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Send a message
+ */
+export const useSendMessage = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendMessage>>,
+    TError,
+    { data: BodyType<SendMessageRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sendMessage>>,
+  TError,
+  { data: BodyType<SendMessageRequest> },
+  TContext
+> => {
+  return useMutation(getSendMessageMutationOptions(options));
+};
+
+/**
+ * Clears all chat history
+ * @summary Clear all messages
+ */
+export const getClearMessagesUrl = () => {
+  return `/api/chat/messages/clear`;
+};
+
+export const clearMessages = async (
+  options?: RequestInit,
+): Promise<ClearMessages200> => {
+  return customFetch<ClearMessages200>(getClearMessagesUrl(), {
+    ...options,
+    method: "POST",
+  });
+};
+
+export const getClearMessagesMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof clearMessages>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof clearMessages>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = ["clearMessages"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof clearMessages>>,
+    void
+  > = () => {
+    return clearMessages(requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ClearMessagesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof clearMessages>>
+>;
+
+export type ClearMessagesMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Clear all messages
+ */
+export const useClearMessages = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof clearMessages>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof clearMessages>>,
+  TError,
+  void,
+  TContext
+> => {
+  return useMutation(getClearMessagesMutationOptions(options));
+};

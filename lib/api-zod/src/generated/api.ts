@@ -14,3 +14,38 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Returns list of chat messages
+ * @summary Get all messages
+ */
+export const GetMessagesResponseItem = zod.object({
+  id: zod.string(),
+  role: zod.enum(["user", "assistant"]),
+  content: zod.string(),
+  timestamp: zod.string(),
+});
+export const GetMessagesResponse = zod.array(GetMessagesResponseItem);
+
+/**
+ * Send a new chat message and get AI reply
+ * @summary Send a message
+ */
+export const SendMessageBody = zod.object({
+  content: zod.string(),
+});
+
+export const SendMessageResponse = zod.object({
+  id: zod.string(),
+  role: zod.enum(["user", "assistant"]),
+  content: zod.string(),
+  timestamp: zod.string(),
+});
+
+/**
+ * Clears all chat history
+ * @summary Clear all messages
+ */
+export const ClearMessagesResponse = zod.object({
+  success: zod.boolean(),
+});

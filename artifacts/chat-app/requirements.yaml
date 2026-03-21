@@ -1,0 +1,14 @@
+packages:
+  "framer-motion": "Animations for message bubbles, typing indicators, and layout transitions"
+  "date-fns": "Formatting and rendering human-readable message timestamps"
+  "react-markdown": "Rendering markdown content, lists, and code blocks in AI responses"
+  "remark-gfm": "Supporting GitHub Flavored Markdown (tables, strikethrough) in chat"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes"
+
+images: []
+
+notes:
+  - "The UI relies on standard HSL color variables and Google Fonts."
+  - "React Query hooks are imported from @workspace/api-client-react per instructions."
+  - "Optimistic UI updates are implemented for sending messages for a snappy user experience."
