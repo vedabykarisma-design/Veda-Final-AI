@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Sparkles, Trash2, ShieldAlert } from "lucide-react";
+import { Trash2, ShieldAlert } from "lucide-react";
+import vedaLogo from "/veda-logo.png";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { TypingIndicator } from "@/components/chat/TypingIndicator";
@@ -31,8 +32,8 @@ export default function ChatPage() {
       {/* Header */}
       <header className="flex-none flex items-center justify-between px-4 md:px-6 py-3 bg-background/60 backdrop-blur-xl border-b border-border/50 z-20">
         <div className="flex items-center gap-3 md:gap-4">
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary shadow-inner">
-            <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl overflow-hidden shadow-inner flex-shrink-0">
+            <img src={vedaLogo} alt="Veda AI Agent" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="font-display font-bold text-lg md:text-xl text-foreground tracking-tight">Veda AI Agent</h1>
@@ -71,9 +72,8 @@ export default function ChatPage() {
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="flex flex-col items-center justify-center h-[60vh] text-center px-4"
               >
-                <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-[2rem] bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/30 flex items-center justify-center mb-8 shadow-2xl shadow-primary/10">
-                  <div className="absolute inset-0 bg-white/40 rounded-[2rem] backdrop-blur-sm mix-blend-overlay"></div>
-                  <Sparkles className="w-12 h-12 md:w-14 md:h-14 text-primary relative z-10" />
+                <div className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center mb-8">
+                  <img src={vedaLogo} alt="Veda AI Agent" className="w-full h-full object-contain drop-shadow-2xl" />
                 </div>
                 <h2 className="font-display text-3xl md:text-4xl font-extrabold text-foreground mb-4 tracking-tight">
                   How can I help you today?
