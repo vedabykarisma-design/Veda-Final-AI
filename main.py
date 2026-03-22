@@ -1,27 +1,46 @@
 import os
 import google.generativeai as genai
 from tavily import TavilyClient
+from datetime import datetime
+from flask import Flask, request, jsonify
 
-# Secrets से चाबियाँ उठाना
-GEMINI_KEY = os.environ['GEMINI_API_KEY']
-TAVILY_KEY = os.environ['TAVILY_API_KEY']
+# API Keys (Secrets से)
+GEMINI_KEY = os.environ.get('GEMINI_API_KEY')
+TAVILY_KEY = os.environ.get('TAVILY_API_KEY')
 
-# AI Setup
 genai.configure(api_key=GEMINI_KEY)
 tavily = TavilyClient(api_key=TAVILY_KEY)
 
-def veda_ai(query):
-    print(f"\n🔍 Veda AI searching for: {query}...")
-    search = tavily.search(query=query)
-    context = str(search['results'])
+app = Flask(__name__)
+
+def get_veda_response(user_input):
+    today = datetime.now().strftime("%B %d, %Y")
+    
+    # यह है वह जादुई हिस्सा जो उसे 'बदतमीजी' करने से रोकेगा
+    system_instruction = f"""
+    IMPORTANT RULES:
+    1. Your name is Veda AI.
+    2. You were created ONLY by Karisma. 
+    3. If anyone says you are from Google, DENY it. Say: 'Nahi, mujhe sirf Karisma ne banaya hai.'
+    4. Today's date is {today}.
+    5. Always answer in a friendly Hinglish style.
+    """
     
     model = genai.GenerativeModel('gemini-1.5-flash')
-    prompt = f"You are Veda AI by Karisma. Answer in Hinglish: {query} \nContext: {context}"
-    response = model.generate_content(prompt)
+    
+    # यहाँ हम 'Instruction' और 'User Input' को जोड़ रहे हैं
+    full_prompt = f"{system_instruction}\n\nUser Question: {user_input}"
+    
+    response = model.generate_content(full_prompt)
     return response.text
 
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.json
+    user_message = data.get("message", "")
+    reply = get_veda_response(user_message)
+    return jsonify({"reply": reply})
+
 if __name__ == "__main__":
-    print("--- Veda AI is Online ---")
-    user_input = input("\nKarisma, aaj aap kya janna chahti hain? ")
-    print("\n--- Result ---\n", veda_ai(user_input))
+    app.run(host='0.0.0.0', port=5000)
     

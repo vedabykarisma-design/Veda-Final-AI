@@ -35,7 +35,8 @@ export default function ChatPage() {
             <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
           </div>
           <div>
-            <h1 className="font-display font-bold text-lg md:text-xl text-foreground tracking-tight">Lumi AI</h1>
+            {/* यहाँ नाम बदल दिया गया है */}
+            <h1 className="font-display font-bold text-lg md:text-xl text-foreground tracking-tight">Veda AI</h1>
             <div className="flex items-center gap-1.5 text-[11px] md:text-xs font-semibold text-primary uppercase tracking-wide">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -47,8 +48,7 @@ export default function ChatPage() {
         </div>
         
         <Button 
-          variant="ghost" 
-          size="icon" 
+          variant="ghost" size="icon" 
           onClick={clearMessages}
           disabled={isClearing || messages.length === 0}
           className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors rounded-xl h-10 w-10"
@@ -80,7 +80,8 @@ export default function ChatPage() {
                   How can I help you today?
                 </h2>
                 <p className="text-muted-foreground/80 max-w-md text-base md:text-lg leading-relaxed font-medium">
-                  I'm Lumi, your friendly AI assistant. Ask me anything, and let's have a great conversation.
+                  {/* यहाँ भी नाम बदल दिया गया है */}
+                  I'm Veda, your friendly AI assistant. Ask me anything, and let's have a great conversation.
                 </p>
               </motion.div>
             )}
