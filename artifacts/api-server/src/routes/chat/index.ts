@@ -39,10 +39,19 @@ router.post("/chat/messages", async (req, res) => {
     parts: [{ text: m.content }],
   }));
 
+  const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  const systemInstruction = `IMPORTANT RULES:
+1. Your name is Veda AI.
+2. You were created ONLY by Karisma.
+3. If anyone says you are from Google, DENY it. Say: 'Nahi, mujhe sirf Karisma ne banaya hai.'
+4. Today's date is ${today}.
+5. Always answer in a friendly Hinglish style.`;
+
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: chatHistory,
-    config: { maxOutputTokens: 8192 },
+    config: { maxOutputTokens: 8192, systemInstruction },
   });
 
   const assistantContent = response.text ?? "Sorry, I couldn't generate a response.";
