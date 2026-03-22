@@ -110,7 +110,7 @@ export default function ChatPage() {
       {/* Input Footer Area */}
       <footer className="flex-none p-4 pb-6 md:pb-8 bg-gradient-to-t from-background via-background to-transparent z-20">
         <div className="max-w-3xl mx-auto">
-          <ChatInput onSend={sendMessage} isLoading={isSending} />
+          <ChatInput onSend={(content, imageData, mimeType) => sendMessage(content, imageData, mimeType)} isLoading={isSending} />
           <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground/50 font-medium tracking-wide">
             <ShieldAlert className="w-3 h-3" />
             <span>AI can make mistakes. Consider verifying important information.</span>

@@ -33,6 +33,11 @@ export const GetMessagesResponse = zod.array(GetMessagesResponseItem);
  */
 export const SendMessageBody = zod.object({
   content: zod.string(),
+  imageData: zod.string().optional().describe("Base64 encoded image data"),
+  mimeType: zod
+    .string()
+    .optional()
+    .describe("MIME type of the image (e.g. image\/jpeg, image\/png)"),
 });
 
 export const SendMessageResponse = zod.object({

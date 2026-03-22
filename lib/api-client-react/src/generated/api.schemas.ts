@@ -25,6 +25,10 @@ export interface Message {
 
 export interface SendMessageRequest {
   content: string;
+  /** Base64 encoded image data */
+  imageData?: string;
+  /** MIME type of the image (e.g. image/jpeg, image/png) */
+  mimeType?: string;
 }
 
 export type ClearMessages200 = {

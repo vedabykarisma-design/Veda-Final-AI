@@ -40,7 +40,18 @@ export function MessageBubble({ message }: { message: Message }) {
         )}>
           
           {isUser ? (
-             <div className="whitespace-pre-wrap">{message.content}</div>
+            <div className="flex flex-col gap-2">
+              {(message as Message & { imageUrl?: string }).imageUrl && (
+                <img
+                  src={(message as Message & { imageUrl?: string }).imageUrl}
+                  alt="Shared image"
+                  className="max-w-[220px] rounded-xl border border-primary-foreground/20 shadow"
+                />
+              )}
+              {message.content.trim() && message.content !== " " && (
+                <div className="whitespace-pre-wrap">{message.content}</div>
+              )}
+            </div>
           ) : (
             <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-p:leading-[1.6] prose-pre:bg-muted prose-pre:text-muted-foreground prose-pre:rounded-xl prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>

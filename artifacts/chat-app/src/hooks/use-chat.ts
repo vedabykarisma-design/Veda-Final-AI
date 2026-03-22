@@ -1,9 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { 
-  useGetMessages, 
-  useSendMessage, 
-  useClearMessages, 
-  getGetMessagesQueryKey 
+import {
+  useGetMessages,
+  useSendMessage,
+  useClearMessages,
+  getGetMessagesQueryKey,
 } from "@workspace/api-client-react";
 import type { Message } from "@workspace/api-client-react";
 
@@ -11,12 +11,11 @@ export function useChat() {
   const queryClient = useQueryClient();
   const queryKey = getGetMessagesQueryKey();
 
-  // Fetch messages - polling occasionally ensures multiple clients stay synced
   const messagesQuery = useGetMessages({
     query: {
-      refetchInterval: 5000, 
+      refetchInterval: 5000,
       staleTime: 2000,
-    }
+    },
   });
 
   const clearMutation = useClearMessages({
@@ -27,8 +26,8 @@ export function useChat() {
       },
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey });
-      }
-    }
+      },
+    },
   });
 
   const sendMutation = useSendMessage({
@@ -36,7 +35,7 @@ export function useChat() {
       onMutate: async (variables) => {
         await queryClient.cancelQueries({ queryKey });
         const previousMessages = queryClient.getQueryData<Message[]>(queryKey);
-        
+
         const optimisticMsg: Message = {
           id: `opt-${Date.now()}`,
           role: "user",
@@ -44,26 +43,38 @@ export function useChat() {
           timestamp: new Date().toISOString(),
         };
 
-        queryClient.setQueryData<Message[]>(queryKey, (old = []) => [...old, optimisticMsg]);
+        queryClient.setQueryData<Message[]>(queryKey, (old = []) => [
+          ...old,
+          optimisticMsg,
+        ]);
         return { previousMessages };
       },
-      onError: (err, variables, context) => {
+      onError: (_err, _variables, context) => {
         if (context?.previousMessages) {
           queryClient.setQueryData(queryKey, context.previousMessages);
         }
       },
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey });
-      }
-    }
+      },
+    },
   });
+
+  const sendMessage = (content: string, imageData?: string, mimeType?: string) => {
+    sendMutation.mutate({
+      data: {
+        content,
+        ...(imageData ? { imageData, mimeType } : {}),
+      },
+    });
+  };
 
   return {
     messages: messagesQuery.data ?? [],
     isLoading: messagesQuery.isLoading && !messagesQuery.data,
     isSending: sendMutation.isPending,
     isClearing: clearMutation.isPending,
-    sendMessage: (content: string) => sendMutation.mutate({ data: { content } }),
-    clearMessages: () => clearMutation.mutate()
+    sendMessage,
+    clearMessages: () => clearMutation.mutate(),
   };
 }

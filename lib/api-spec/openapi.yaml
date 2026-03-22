@@ -107,5 +107,11 @@ components:
       properties:
         content:
           type: string
+        imageData:
+          type: string
+          description: Base64 encoded image data
+        mimeType:
+          type: string
+          description: MIME type of the image (e.g. image/jpeg, image/png)
       required:
         - content
