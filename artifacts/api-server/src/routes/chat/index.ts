@@ -65,7 +65,9 @@ router.post("/chat/messages", async (req, res) => {
     pdfName?: string;
   };
 
-  if (!content || typeof content !== "string" || content.trim() === "") {
+  const hasContent = content && typeof content === "string" && content.trim() !== "" && content.trim() !== " ";
+  const hasAttachment = !!imageData || !!pdfData;
+  if (!hasContent && !hasAttachment) {
     res.status(400).json({ error: "Message content is required" });
     return;
   }
@@ -81,10 +83,12 @@ router.post("/chat/messages", async (req, res) => {
     }
   }
 
+  const displayContent = hasContent ? content.trim() : imageData ? "📷 Image" : `📄 ${pdfName ?? "PDF"}`;
+
   const userMessage: Message = {
     id: randomUUID(),
     role: "user",
-    content: content.trim(),
+    content: displayContent,
     timestamp: new Date().toISOString(),
     imageUrl: imageData ? `data:${mimeType ?? "image/jpeg"};base64,${imageData}` : undefined,
     pdfName: pdfName,
@@ -138,18 +142,25 @@ STRICT IDENTITY RULES:
     });
   }
 
-  currentParts.push({ text: content.trim() + webContext + pdfContext });
+  const userText = (hasContent ? content.trim() : imageData ? "Is image mein kya hai? Please analyze karo." : "") + webContext + pdfContext;
+  currentParts.push({ text: userText });
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: [
-      ...historyForAI,
-      { role: "user", parts: currentParts as Array<{ text: string }> },
-    ],
-    config: { maxOutputTokens: 8192, systemInstruction },
-  });
-
-  const assistantContent = response.text ?? "Sorry, I couldn't generate a response.";
+  let assistantContent: string;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: [
+        ...historyForAI,
+        { role: "user", parts: currentParts as never },
+      ],
+      config: { maxOutputTokens: 8192, systemInstruction },
+    });
+    assistantContent = (typeof response.text === "function" ? response.text() : response.text) ?? "Sorry, kuch error aa gayi. Dobara try karo!";
+  } catch (err) {
+    const errMsg = (err as Error).message ?? "Unknown error";
+    assistantContent = `Oops! Kuch gadbad ho gayi: ${errMsg}. Thodi der baad try karo! 🙏`;
+  }
 
   const assistantMessage: Message = {
     id: randomUUID(),
