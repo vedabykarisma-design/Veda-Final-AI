@@ -149,7 +149,7 @@ STRICT IDENTITY RULES:
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       contents: [
         ...historyForAI,
         { role: "user", parts: currentParts as never },
