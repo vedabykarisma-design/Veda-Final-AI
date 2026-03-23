@@ -38,6 +38,8 @@ export const SendMessageBody = zod.object({
     .string()
     .optional()
     .describe("MIME type of the image (e.g. image\/jpeg, image\/png)"),
+  pdfData: zod.string().optional().describe("Base64 encoded PDF data"),
+  pdfName: zod.string().optional().describe("Original PDF filename"),
 });
 
 export const SendMessageResponse = zod.object({

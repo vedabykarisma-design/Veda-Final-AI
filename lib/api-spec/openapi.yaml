@@ -113,5 +113,11 @@ components:
         mimeType:
           type: string
           description: MIME type of the image (e.g. image/jpeg, image/png)
+        pdfData:
+          type: string
+          description: Base64 encoded PDF data
+        pdfName:
+          type: string
+          description: Original PDF filename
       required:
         - content

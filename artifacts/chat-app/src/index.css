@@ -121,3 +121,68 @@
     @apply font-bold tracking-tight;
   }
 }
+
+/* ── Glassmorphism Utility Classes ── */
+@layer utilities {
+  .glass-header {
+    background: rgba(15, 10, 40, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .glass-sidebar {
+    background: rgba(10, 8, 30, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .glass-input:focus-within {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .glass-button {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(8px);
+  }
+
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+  }
+
+  .glass-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  /* Message bubbles for glass theme */
+  .glass-bubble-user {
+    background: linear-gradient(135deg, rgba(99,102,241,0.85), rgba(139,92,246,0.85));
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .glass-bubble-ai {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}

@@ -6,66 +6,72 @@ import { Sparkles, User } from "lucide-react";
 import type { Message } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
 
+type ExtendedMessage = Message & { imageUrl?: string; pdfName?: string };
+
 export function MessageBubble({ message }: { message: Message }) {
-  const isUser = message.role === "user";
+  const m = message as ExtendedMessage;
+  const isUser = m.role === "user";
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15, scale: 0.95 }}
+      initial={{ opacity: 0, y: 14, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+      transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
       className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}
     >
-      <div className={cn(
-        "flex gap-3 max-w-[85%] md:max-w-[75%]", 
-        isUser ? "flex-row-reverse" : "flex-row"
-      )}>
-        
+      <div className={cn("flex gap-2.5 max-w-[85%] md:max-w-[78%]", isUser ? "flex-row-reverse" : "flex-row")}>
+
         {/* Avatar */}
         <div className={cn(
-          "flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-2xl flex items-center justify-center shadow-inner",
-          isUser 
-            ? "bg-secondary text-secondary-foreground" 
-            : "bg-gradient-to-br from-primary/20 to-accent/20 text-primary"
+          "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center shadow",
+          isUser
+            ? "bg-indigo-500/80 backdrop-blur-sm border border-white/20 text-white"
+            : "bg-white/10 backdrop-blur-sm border border-white/15 text-white/90"
         )}>
-          {isUser ? <User className="w-4 h-4 md:w-5 md:h-5" /> : <Sparkles className="w-4 h-4 md:w-5 md:h-5" />}
+          {isUser
+            ? <User className="w-4 h-4" />
+            : <Sparkles className="w-4 h-4" />
+          }
         </div>
 
-        {/* Bubble Content */}
+        {/* Bubble */}
         <div className={cn(
-          "group relative px-5 py-4 text-[15px] md:text-base leading-relaxed break-words shadow-sm",
+          "group relative px-4 py-3 text-[14.5px] md:text-[15px] leading-relaxed break-words rounded-2xl",
           isUser
-            ? "bg-gradient-to-b from-primary to-primary/95 text-primary-foreground rounded-3xl rounded-tr-md shadow-primary/20"
-            : "bg-card border border-border/60 text-card-foreground rounded-3xl rounded-tl-md"
+            ? "glass-bubble-user text-white rounded-tr-md"
+            : "glass-bubble-ai text-white/90 rounded-tl-md"
         )}>
-          
           {isUser ? (
             <div className="flex flex-col gap-2">
-              {(message as Message & { imageUrl?: string }).imageUrl && (
+              {m.imageUrl && (
                 <img
-                  src={(message as Message & { imageUrl?: string }).imageUrl}
+                  src={m.imageUrl}
                   alt="Shared image"
-                  className="max-w-[220px] rounded-xl border border-primary-foreground/20 shadow"
+                  className="max-w-[220px] rounded-xl border border-white/20 shadow-lg"
                 />
               )}
-              {message.content.trim() && message.content !== " " && (
-                <div className="whitespace-pre-wrap">{message.content}</div>
+              {m.pdfName && (
+                <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2">
+                  <div className="w-8 h-9 bg-red-500/30 rounded flex items-center justify-center text-[9px] font-bold text-red-300">PDF</div>
+                  <span className="text-xs text-white/80 truncate max-w-[140px]">{m.pdfName}</span>
+                </div>
+              )}
+              {m.content.trim() && m.content !== " " && (
+                <div className="whitespace-pre-wrap">{m.content}</div>
               )}
             </div>
           ) : (
-            <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none prose-p:leading-[1.6] prose-pre:bg-muted prose-pre:text-muted-foreground prose-pre:rounded-xl prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {message.content}
-              </ReactMarkdown>
+            <div className="prose prose-sm prose-invert max-w-none prose-p:leading-relaxed prose-pre:bg-white/10 prose-pre:text-white/80 prose-pre:rounded-xl prose-a:text-indigo-300 prose-strong:text-white">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
             </div>
           )}
-          
-          {/* Timestamp (revealed on hover) */}
+
+          {/* Timestamp */}
           <div className={cn(
-            "text-[11px] opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-2 whitespace-nowrap font-medium",
-            isUser ? "right-full mr-3 text-muted-foreground" : "left-full ml-3 text-muted-foreground"
+            "text-[10px] opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-5 whitespace-nowrap text-white/40",
+            isUser ? "right-1" : "left-1"
           )}>
-            {format(new Date(message.timestamp), "h:mm a")}
+            {format(new Date(m.timestamp), "h:mm a")}
           </div>
         </div>
       </div>

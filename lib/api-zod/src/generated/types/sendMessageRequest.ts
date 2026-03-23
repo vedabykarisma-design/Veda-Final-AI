@@ -12,4 +12,8 @@ export interface SendMessageRequest {
   imageData?: string;
   /** MIME type of the image (e.g. image/jpeg, image/png) */
   mimeType?: string;
+  /** Base64 encoded PDF data */
+  pdfData?: string;
+  /** Original PDF filename */
+  pdfName?: string;
 }
