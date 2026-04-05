@@ -1,0 +1,90 @@
+<script>
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'hi-IN';
+
+    function openLiveMode() {
+        document.getElementById('live-overlay').style.display = 'flex';
+        recognition.start();
+    }
+
+    function closeLiveMode() {
+        document.getElementById('live-overlay').style.display = 'none';
+        recognition.stop();
+        window.speechSynthesis.cancel();
+    }
+
+    // 1. VEDA SPEAK (EMOJI & SYMBOL FILTER)
+    function vedaSpeak(text) {
+        // Emojis AUR symbols (*, #, _) dono ko filter karna
+        const cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+                              .replace(/[*#_]/g, ''); 
+
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        utter.lang = 'hi-IN';
+        utter.rate = 1.0;
+        utter.pitch = 1.1;
+
+        // SMART FEATURE: Jab Veda bolna khatam kare, tabhi mic on ho
+        utter.onend = () => {
+            if(document.getElementById('live-overlay').style.display === 'flex') {
+                recognition.start();
+            }
+        };
+
+        window.speechSynthesis.speak(utter);
+    }
+
+    recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        document.getElementById("user-input").value = text;
+        sendMessage();
+        // Yahan se setTimeout hata diya kyunki ab utter.onend handle karega
+    };
+
+    // Typewriter Effect
+    function typeWriter(text, element) {
+        let i = 0;
+        element.innerHTML = ""; 
+        function type() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(type, 30);
+                const container = document.getElementById("chat-container");
+                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+            }
+        }
+        type();
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const container = document.getElementById("chat-container");
+        const message = input.value;
+        if (!message) return;
+
+        container.innerHTML += `<div class="user-msg">Me: ${message}</div>`;
+        input.value = "";
+
+        const vedaDiv = document.createElement("div");
+        vedaDiv.className = "veda-msg";
+        vedaDiv.innerHTML = "Veda soch rahi hai...";
+        container.appendChild(vedaDiv);
+
+        try {
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: message })
+            });
+            const data = await response.json();
+
+            typeWriter(data.reply, vedaDiv);
+            vedaSpeak(data.reply); 
+
+        } catch (err) {
+            vedaDiv.innerHTML = "Master, network mein thodi problem hai. 😊";
+        }
+    }
+</script>

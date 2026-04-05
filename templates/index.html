@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veda AI - Master Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Modern UI Style */
+        body { background: #121212; color: white; font-family: sans-serif; margin: 0; display: flex; }
+        .sidebar { width: 250px; background: #1a1a1a; height: 100vh; padding: 20px; position: fixed; left: -250px; transition: 0.3s; z-index: 10; }
+        .sidebar.active { left: 0; }
+        .chat-area { flex: 1; display: flex; flex-direction: column; height: 100vh; margin-left: 0; transition: 0.3s; }
+        header { padding: 15px; background: #1f1f1f; display: flex; align-items: center; justify-content: space-between; }
+        #chat-box { flex: 1; overflow-y: auto; padding: 20px; }
+        .input-bar { padding: 20px; display: flex; gap: 10px; background: #1f1f1f; }
+        input { flex: 1; padding: 12px; border-radius: 20px; border: none; background: #333; color: white; }
+        button { background: #8e44ad; border: none; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+        .img-btn { background: #34495e; }
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <h3>History (30 Days)</h3>
+        <div id="history-list"></div>
+    </div>
+
+    <div class="chat-area">
+        <header>
+            <i class="fas fa-bars" onclick="toggleSidebar()"></i>
+            <span>Veda AI</span>
+            <i class="fas fa-user-circle"></i>
+        </header>
+
+        <div id="chat-box"></div>
+
+        <div class="input-bar">
+            <input type="file" id="img-input" style="display:none" accept="image/*">
+            <button class="img-btn" onclick="document.getElementById('img-input').click()"><i class="fas fa-image"></i></button>
+            <input type="text" id="msg-input" placeholder="Veda se baat karein...">
+            <button onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        
+        async function sendMsg() {
+            let input = document.getElementById('msg-input');
+            let chatBox = document.getElementById('chat-box');
+            let message = input.value;
+            if(!message) return;
+
+            chatBox.innerHTML += `<div><b>Aap:</b> ${message}</div>`;
+            input.value = "";
+
+            let response = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: message, user_id: "Karisma_123"})
+            });
+            let data = await response.json();
+            chatBox.innerHTML += `<div style="color:#ab47bc"><b>Veda:</b> ${data.reply}</div>`;
+        }
+    </script>
+</body>
+</html>

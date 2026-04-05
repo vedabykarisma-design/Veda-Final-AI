@@ -1,36 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Veda AI Agent</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veda AI - Master Karisma</title>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #020205 100%);
+            color: white; font-family: 'Segoe UI', sans-serif;
+            margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+        }
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .user-msg { align-self: flex-end; background: #4a00e0; padding: 10px 15px; border-radius: 15px 15px 0 15px; max-width: 80%; }
+        .veda-msg { align-self: flex-start; background: #2d005d; padding: 10px 15px; border-radius: 15px 15px 15px 0; max-width: 80%; border: 1px solid #8e2de2; }
+        .controls { padding: 20px; background: rgba(255,255,255,0.05); display: flex; gap: 10px; }
+        input { flex: 1; background: #111; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; }
+        button { background: #8e2de2; border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        #live-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9);
+            display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100;
+        }
+        .orb { width: 150px; height: 150px; background: #8e2de2; border-radius: 50%; filter: blur(30px); animation: pulse 1.5s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
+    </style>
+</head>
+<body>
 
-    <!-- Favicon & App Icons -->
-    <link rel="icon" type="image/png" href="/veda-logo.png" />
-    <link rel="apple-touch-icon" href="/veda-logo.png" />
+    <div id="chat-container"></div>
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+    <div id="live-overlay">
+        <div class="orb"></div>
+        <p>Veda Sun Rahi Hai...</p>
+        <button onclick="stopLiveMode()">Stop</button>
+    </div>
 
-    <!-- iOS PWA meta tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Veda AI Agent" />
+    <div class="controls">
+        <input type="text" id="user-input" placeholder="Master, kuch boliye...">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="startLiveMode()">🎤 Live</button>
+    </div>
 
-    <!-- Android/Chrome PWA -->
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="application-name" content="Veda AI Agent" />
-    <meta name="theme-color" content="#6366f1" />
+    <script>
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'hi-IN';
 
-    <!-- SEO -->
-    <meta name="description" content="Veda AI Agent - Intelligent AI Agent by Karisma" />
+        function startLiveMode() {
+            document.getElementById('live-overlay').style.display = 'flex';
+            recognition.start();
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+        function stopLiveMode() {
+            document.getElementById('live-overlay').style.display = 'none';
+            recognition.stop();
+            window.speechSynthesis.cancel();
+        }
+
+        recognition.onresult = (event) => {
+            const text = event.results[0][0].transcript;
+            document.getElementById("user-input").value = text;
+            sendMessage();
+        };
+
+        function vedaSpeak(text) {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'hi-IN';
+            utter.onend = () => {
+                if(document.getElementById('live-overlay').style.display === 'flex') recognition.start();
+            };
+            window.speechSynthesis.speak(utter);
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("user-input");
+            const container = document.getElementById("chat-container");
+            const msg = input.value;
+            if(!msg) return;
+
+            container.innerHTML += `<div class="user-msg">Me: ${msg}</div>`;
+            input.value = "";
+            
+            const vedaDiv = document.createElement("div");
+            vedaDiv.className = "veda-msg";
+            vedaDiv.innerHTML = "Veda soch rahi hai...";
+            container.appendChild(vedaDiv);
+
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: msg })
+            });
+            const data = await res.json();
+            vedaDiv.innerHTML = data.reply;
+            vedaSpeak(data.audio_text || data.reply);
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+</body>
 </html>
