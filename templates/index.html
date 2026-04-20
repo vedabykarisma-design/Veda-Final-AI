@@ -1,66 +1,1054 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-    <title>Veda AI - Master Edition</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Modern UI Style */
-        body { background: #121212; color: white; font-family: sans-serif; margin: 0; display: flex; }
-        .sidebar { width: 250px; background: #1a1a1a; height: 100vh; padding: 20px; position: fixed; left: -250px; transition: 0.3s; z-index: 10; }
-        .sidebar.active { left: 0; }
-        .chat-area { flex: 1; display: flex; flex-direction: column; height: 100vh; margin-left: 0; transition: 0.3s; }
-        header { padding: 15px; background: #1f1f1f; display: flex; align-items: center; justify-content: space-between; }
-        #chat-box { flex: 1; overflow-y: auto; padding: 20px; }
-        .input-bar { padding: 20px; display: flex; gap: 10px; background: #1f1f1f; }
-        input { flex: 1; padding: 12px; border-radius: 20px; border: none; background: #333; color: white; }
-        button { background: #8e44ad; border: none; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
-        .img-btn { background: #34495e; }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0d0d1a"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>Veda AI — By Karisma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0d0d1a;
+  --surface:#13131f;
+  --surface2:#1a1a2e;
+  --surface3:#212135;
+  --gold:#c8a96e;
+  --gold2:#e8c98a;
+  --gold3:#f5dfa0;
+  --goldglow:rgba(200,169,110,0.15);
+  --goldbright:rgba(200,169,110,0.3);
+  --text:#ede8df;
+  --text2:#a09880;
+  --text3:#5a5445;
+  --accent:#e05c5c;
+  --green:#4ade80;
+  --border:rgba(200,169,110,0.12);
+  --border2:rgba(200,169,110,0.28);
+  --border3:rgba(200,169,110,0.5);
+  --radius:16px;
+  --font-d:'Cormorant Garamond',serif;
+  --font-b:'DM Sans',sans-serif;
+  --shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-b)}
+
+/* ── STARS ── */
+#stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.45}
+
+/* ── LOGIN ── */
+#login-screen{
+  position:fixed;inset:0;z-index:200;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:28px;padding:28px;
+}
+.login-glow{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(200,169,110,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.login-logo{
+  font-family:var(--font-d);font-size:60px;font-weight:700;
+  color:var(--gold);letter-spacing:6px;
+  text-shadow:0 0 50px rgba(200,169,110,0.5),0 0 100px rgba(200,169,110,0.2);
+  animation:floatLogo 4s ease-in-out infinite;position:relative;
+}
+@keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.login-tagline{
+  color:var(--text2);font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  margin-top:-20px;font-family:var(--font-b);
+}
+.login-card{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:20px;padding:28px 28px 24px;
+  width:100%;max-width:380px;
+  display:flex;flex-direction:column;gap:18px;
+  box-shadow:var(--shadow),0 0 60px rgba(200,169,110,0.06);
+  position:relative;overflow:hidden;
+}
+.login-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.login-field{display:flex;flex-direction:column;gap:6px}
+.login-label{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:500}
+.login-input{
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border);border-radius:12px;
+  padding:13px 16px;color:var(--text);
+  font-family:var(--font-b);font-size:15px;outline:none;
+  transition:border-color 0.25s,box-shadow 0.25s;
+}
+.login-input:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(200,169,110,0.1)}
+.login-input::placeholder{color:var(--text3)}
+.login-btn{
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 60%,var(--gold3) 100%);
+  border:none;border-radius:12px;padding:14px;
+  color:#0d0d1a;font-family:var(--font-d);font-size:19px;font-weight:600;
+  cursor:pointer;letter-spacing:1.5px;
+  transition:opacity 0.2s,transform 0.15s,box-shadow 0.2s;
+  box-shadow:0 4px 20px rgba(200,169,110,0.4);
+}
+.login-btn:hover{opacity:0.9;box-shadow:0 6px 28px rgba(200,169,110,0.5)}
+.login-btn:active{transform:scale(0.97)}
+.login-note{font-size:11px;color:var(--text3);text-align:center;line-height:1.6}
+
+/* ── APP SHELL ── */
+#app{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;background:var(--bg)}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:290px;
+  background:var(--surface);border-right:1px solid var(--border);
+  z-index:100;transform:translateX(-100%);
+  transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+#sidebar.open{transform:translateX(0)}
+.s-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  z-index:99;opacity:0;pointer-events:none;
+  transition:opacity 0.3s;backdrop-filter:blur(2px);
+}
+.s-overlay.open{opacity:1;pointer-events:auto}
+.sb-head{
+  padding:20px;border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,var(--surface2),var(--surface));
+}
+.sb-logo{font-family:var(--font-d);font-size:26px;color:var(--gold);letter-spacing:3px}
+.sb-user{font-size:12px;color:var(--text2);margin-top:3px}
+.sb-stats{
+  margin:12px 14px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:12px;padding:14px;
+}
+.sb-stat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sb-stat-row:last-child{margin-bottom:0}
+.sb-stat-label{font-size:11px;color:var(--text3)}
+.sb-stat-val{font-size:13px;color:var(--gold);font-weight:500}
+.sb-section{
+  padding:12px 18px 6px;font-size:10px;color:var(--text3);
+  letter-spacing:2px;text-transform:uppercase;
+}
+.sb-btn{
+  display:flex;align-items:center;gap:12px;padding:12px 18px;
+  cursor:pointer;font-size:14px;color:var(--text2);
+  transition:background 0.15s,color 0.15s;
+  border:none;background:none;width:100%;text-align:left;
+  font-family:var(--font-b);
+}
+.sb-btn:hover{background:var(--goldglow);color:var(--gold)}
+.sb-btn .ico{width:17px;height:17px;opacity:0.65;flex-shrink:0}
+.sb-btn:hover .ico{opacity:1}
+.sb-spacer{flex:1}
+
+/* ── TOPBAR ── */
+#topbar{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);position:relative;z-index:5;flex-shrink:0;
+}
+.tb-icon-btn{
+  width:40px;height:40px;border-radius:11px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:border-color 0.2s,background 0.2s;
+}
+.tb-icon-btn:hover{background:var(--surface3);border-color:var(--border2)}
+.veda-title-bar{flex:1;text-align:center;min-width:0}
+.veda-title-bar .name{font-family:var(--font-d);font-size:21px;color:var(--gold);letter-spacing:2.5px}
+.veda-title-bar .status{
+  font-size:11px;color:var(--text3);
+  display:flex;align-items:center;justify-content:center;gap:5px;margin-top:2px;
+}
+.s-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:sdot 2s infinite}
+@keyframes sdot{0%,100%{opacity:1}50%{opacity:0.4}}
+.tb-live-btn{
+  padding:7px 14px;border-radius:20px;font-size:12px;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--gold);cursor:pointer;font-family:var(--font-b);
+  transition:all 0.2s;flex-shrink:0;white-space:nowrap;
+}
+.tb-live-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ── MODE BAR ── */
+#mode-bar{
+  display:flex;gap:7px;padding:9px 14px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);overflow-x:auto;flex-shrink:0;
+}
+#mode-bar::-webkit-scrollbar{display:none}
+.mpill{
+  padding:5px 15px;border-radius:20px;font-size:12px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text2);cursor:pointer;white-space:nowrap;
+  transition:all 0.2s;font-family:var(--font-b);flex-shrink:0;
+}
+.mpill.active{background:var(--goldglow);border-color:var(--gold);color:var(--gold);font-weight:500}
+
+/* ── CHAT AREA ── */
+#chat-wrap{
+  flex:1;overflow-y:auto;padding:18px 14px;
+  display:flex;flex-direction:column;gap:14px;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+#chat-wrap::-webkit-scrollbar{width:3px}
+#chat-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.msg-row{display:flex;gap:9px;align-items:flex-end;animation:msgIn 0.3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.msg-row.user{flex-direction:row-reverse}
+.avatar{
+  width:33px;height:33px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-size:13px;font-weight:600;
+  flex-shrink:0;
+}
+.av-veda{background:linear-gradient(135deg,#c8a96e,#e8c98a);color:#0d0d1a;box-shadow:0 0 14px rgba(200,169,110,0.35)}
+.av-user{background:var(--surface2);border:1px solid var(--border2);color:var(--gold)}
+.msg-body{max-width:78%}
+.bubble{
+  padding:11px 15px;border-radius:18px;
+  font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word;
+}
+.bubble-veda{
+  background:var(--surface);border:1px solid var(--border);color:var(--text);
+  border-bottom-left-radius:5px;
+}
+.bubble-user{
+  background:linear-gradient(135deg,rgba(200,169,110,0.18),rgba(200,169,110,0.09));
+  border:1px solid var(--border2);color:var(--text);border-bottom-right-radius:5px;
+}
+.msg-footer{
+  display:flex;align-items:center;gap:8px;margin-top:4px;padding:0 4px;
+}
+.msg-time{font-size:10px;color:var(--text3)}
+.msg-badge{
+  font-size:10px;padding:2px 8px;border-radius:10px;
+  background:var(--goldglow);color:var(--gold);letter-spacing:0.5px;
+}
+.tts-btn{
+  background:none;border:none;cursor:pointer;padding:2px 5px;
+  border-radius:6px;font-size:11px;color:var(--text3);
+  display:flex;align-items:center;gap:3px;
+  transition:color 0.2s,background 0.2s;white-space:nowrap;
+}
+.tts-btn:hover{color:var(--gold);background:var(--goldglow)}
+.tts-btn.playing{color:var(--gold)}
+
+/* Typing dots */
+.typing-b{display:flex;gap:5px;align-items:center;padding:4px 0}
+.typing-b span{
+  width:7px;height:7px;border-radius:50%;background:var(--gold);
+  animation:bounce 1.2s infinite;
+}
+.typing-b span:nth-child(2){animation-delay:0.2s}
+.typing-b span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+
+/* Image preview in chat */
+.chat-img{
+  max-width:220px;border-radius:12px;border:1px solid var(--border2);
+  margin-bottom:6px;display:block;
+}
+
+/* Empty state */
+.empty-s{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;flex:1;gap:10px;padding:40px 20px;
+}
+.empty-v{font-family:var(--font-d);font-size:72px;color:var(--gold);opacity:0.3;line-height:1}
+.empty-t{font-size:14px;color:var(--text3);text-align:center;line-height:1.7;max-width:260px}
+.empty-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px}
+.chip{
+  padding:7px 14px;border-radius:20px;border:1px solid var(--border2);
+  color:var(--text2);font-size:12px;cursor:pointer;
+  transition:all 0.2s;background:var(--surface);
+}
+.chip:hover{background:var(--goldglow);color:var(--gold);border-color:var(--gold)}
+
+/* ── LIVE INDICATOR ── */
+.live-ind{
+  display:none;text-align:center;font-size:11px;
+  color:var(--accent);padding:6px;
+  animation:blink 1.5s infinite;flex-shrink:0;
+}
+.live-ind.show{display:block}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ── UPLOAD PREVIEW ── */
+#upload-preview{
+  display:none;align-items:center;gap:10px;
+  padding:8px 14px;background:var(--surface2);
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+#upload-preview.show{display:flex}
+#preview-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border2)}
+#preview-name{flex:1;font-size:13px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#preview-type{font-size:10px;color:var(--gold);padding:2px 8px;border-radius:8px;background:var(--goldglow)}
+#preview-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;line-height:1;padding:2px 4px}
+#preview-close:hover{color:var(--accent)}
+
+/* ── INPUT AREA ── */
+#input-area{padding:10px 14px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.input-actions{display:flex;gap:7px;margin-bottom:8px;align-items:center}
+.ia-btn{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.2s;flex-shrink:0;position:relative;
+}
+.ia-btn:hover{background:var(--surface3);border-color:var(--border2)}
+.ia-btn.active{background:var(--goldglow);border-color:var(--gold)}
+.ia-btn svg{width:16px;height:16px}
+.ia-label{font-size:10px;color:var(--text3);flex:1;padding-left:2px}
+.input-wrap{
+  display:flex;gap:9px;align-items:flex-end;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:24px;padding:8px 8px 8px 16px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.input-wrap:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,169,110,0.08)}
+#msg-input{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--text);font-family:var(--font-b);font-size:14px;
+  resize:none;max-height:110px;min-height:22px;
+  line-height:1.55;padding-top:3px;
+}
+#msg-input::placeholder{color:var(--text3)}
+.mic-btn{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:var(--surface);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.2s;
+}
+.mic-btn:hover{border-color:var(--gold);background:var(--goldglow)}
+.mic-btn.recording{
+  background:var(--accent);border-color:var(--accent);
+  animation:micPulse 1s infinite;
+}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,92,92,0.4)}50%{box-shadow:0 0 0 8px rgba(224,92,92,0)}}
+.send-btn{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity 0.2s,transform 0.15s;
+  box-shadow:0 0 18px rgba(200,169,110,0.35);
+}
+.send-btn:hover{opacity:0.88}
+.send-btn:active{transform:scale(0.92)}
+.send-btn svg{width:16px;height:16px;fill:#0d0d1a}
+
+/* ── HISTORY PANEL ── */
+#history-panel{
+  position:fixed;inset:0;z-index:150;
+  background:var(--bg);display:none;flex-direction:column;
+}
+#history-panel.open{display:flex}
+.hp-top{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 16px;border-bottom:1px solid var(--border);
+  background:var(--surface);flex-shrink:0;
+}
+.hp-top h2{font-family:var(--font-d);font-size:21px;color:var(--gold);flex:1}
+.hp-close{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:17px;color:var(--text2);
+}
+#history-list{flex:1;overflow-y:auto;padding:14px}
+.hi{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:13px;padding:13px 15px;margin-bottom:10px;
+}
+.hi-u{font-size:13px;color:var(--text2);margin-bottom:5px}
+.hi-v{font-size:13px;color:var(--text);line-height:1.55}
+.hi-foot{display:flex;align-items:center;gap:8px;margin-top:7px}
+.hi-t{font-size:10px;color:var(--text3)}
+.hi-mode{font-size:10px;padding:2px 8px;border-radius:9px;background:var(--goldglow);color:var(--gold)}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:85px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:12px;padding:10px 20px;
+  font-size:13px;color:var(--gold);
+  opacity:0;transition:all 0.28s;
+  pointer-events:none;z-index:300;
+  white-space:nowrap;
+  box-shadow:var(--shadow);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── TTS WAVES ── */
+.tts-waves{display:inline-flex;gap:2px;align-items:center;height:14px;margin-left:3px}
+.tts-waves span{
+  width:2px;border-radius:2px;background:var(--gold);
+  animation:wave 0.8s infinite ease-in-out;
+}
+.tts-waves span:nth-child(1){animation-delay:0s;height:6px}
+.tts-waves span:nth-child(2){animation-delay:0.15s;height:11px}
+.tts-waves span:nth-child(3){animation-delay:0.3s;height:8px}
+.tts-waves span:nth-child(4){animation-delay:0.15s;height:11px}
+.tts-waves span:nth-child(5){animation-delay:0s;height:6px}
+@keyframes wave{0%,100%{transform:scaleY(0.5)}50%{transform:scaleY(1.3)}}
+
+/* ── SEARCH BADGE ── */
+.search-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;padding:3px 10px;border-radius:10px;
+  background:rgba(100,160,255,0.1);color:#82b4ff;
+  margin-bottom:6px;
+}
+</style>
 </head>
 <body>
-    <div id="sidebar" class="sidebar">
-        <h3>History (30 Days)</h3>
-        <div id="history-list"></div>
+<canvas id="stars"></canvas>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-glow"></div>
+  <div class="login-logo">Veda</div>
+  <div class="login-tagline">by Master Karisma &nbsp;·&nbsp; AI Sahayika</div>
+  <div class="login-card">
+    <div class="login-field">
+      <div class="login-label">Aapka Naam</div>
+      <input class="login-input" id="ln-name" type="text" placeholder="Apna naam likhein..." autocomplete="off" autocorrect="off"/>
+    </div>
+    <div class="login-field">
+      <div class="login-label">User ID (unique)</div>
+      <input class="login-input" id="ln-uid" type="text" placeholder="jaise: karisma123" autocomplete="off" autocorrect="off"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Veda se Milein &rarr;</button>
+    <div class="login-note">Aapki ID se aapki chat history save rahegi ✨<br>Agle baar direct milenge!</div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="s-overlay" id="s-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">Veda</div>
+    <div class="sb-user" id="sb-user">Namaste! 🌸</div>
+  </div>
+  <div class="sb-stats">
+    <div class="sb-stat-row">
+      <span class="sb-stat-label">Kul Baatein</span>
+      <span class="sb-stat-val" id="sb-total">0</span>
+    </div>
+    <div class="sb-stat-row">
+      <span class="sb-stat-label">Member Since</span>
+      <span class="sb-stat-val" id="sb-since">—</span>
+    </div>
+    <div class="sb-stat-row">
+      <span class="sb-stat-label">Current Mode</span>
+      <span class="sb-stat-val" id="sb-mode">💬 Chat</span>
+    </div>
+  </div>
+  <div class="sb-section">Kaam</div>
+  <button class="sb-btn" onclick="openHistory();closeSidebar()">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+    Chat History
+  </button>
+  <button class="sb-btn" onclick="clearHistory()">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6M14,11v6"/></svg>
+    History Saaf Karein
+  </button>
+  <div class="sb-section">Account</div>
+  <button class="sb-btn" onclick="logout()">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9,21H5a2,2,0,0,1-2-2V5A2,2,0,0,1,5,3H9"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Logout
+  </button>
+  <div class="sb-spacer"></div>
+  <div style="padding:16px 18px;font-size:11px;color:var(--text3);line-height:1.6">
+    Veda AI &mdash; Created by<br>Master Karisma ✨
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div class="tb-icon-btn" onclick="openSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2.2">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </div>
+    <div class="veda-title-bar">
+      <div class="name">Veda AI</div>
+      <div class="status">
+        <span class="s-dot"></span>
+        <span id="status-text">Online</span>
+      </div>
+    </div>
+    <button class="tb-live-btn" id="live-toggle" onclick="toggleLive()">🎙 Live</button>
+  </div>
+
+  <!-- MODE PILLS -->
+  <div id="mode-bar">
+    <button class="mpill active" onclick="setMode('chat',this)">💬 Chat</button>
+    <button class="mpill" onclick="setMode('deep',this)">🧠 Deep Think</button>
+    <button class="mpill" onclick="setMode('creative',this)">✨ Creative</button>
+    <button class="mpill" onclick="setMode('emotional',this)">💛 Emotional</button>
+    <button class="mpill" onclick="setMode('task',this)">📋 Task</button>
+  </div>
+
+  <!-- CHAT -->
+  <div id="chat-wrap">
+    <div class="empty-s" id="empty-s">
+      <div class="empty-v">V</div>
+      <div class="empty-t">Veda aapka intezaar kar rahi thi.<br>Kuch bhi poochho — main yahaan hoon. 🌸</div>
+      <div class="empty-chips">
+        <div class="chip" onclick="quickAsk('Mujhe apna parichay do')">Parichay do</div>
+        <div class="chip" onclick="quickAsk('Aaj mera mood kharab hai, help karo')">Mood theek karo</div>
+        <div class="chip" onclick="quickAsk('Python sikhao mujhe')">Python sikhao</div>
+        <div class="chip" onclick="quickAsk('Ek creative story likho')">Story likho</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE INDICATOR -->
+  <div class="live-ind" id="live-ind">🔴 Live Mode — Bol ke type karo</div>
+
+  <!-- UPLOAD PREVIEW -->
+  <div id="upload-preview">
+    <img id="preview-thumb" src="" alt="preview" style="display:none"/>
+    <span id="preview-name">file.pdf</span>
+    <span id="preview-type">IMG</span>
+    <button id="preview-close" onclick="clearUpload()">✕</button>
+  </div>
+
+  <!-- INPUT AREA -->
+  <div id="input-area">
+    <!-- Action buttons row -->
+    <div class="input-actions">
+      <!-- Camera / Gallery -->
+      <div class="ia-btn" id="btn-camera" title="Camera / Gallery" onclick="triggerImageUpload()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+      <!-- PDF -->
+      <div class="ia-btn" id="btn-pdf" title="PDF Upload" onclick="triggerPdfUpload()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="13"/>
+          <line x1="9" y1="17" x2="11" y2="17"/>
+        </svg>
+      </div>
+      <!-- Web Search -->
+      <div class="ia-btn" id="btn-search" title="Web Search" onclick="toggleSearchMode()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <span class="ia-label" id="mode-label">Chat Mode</span>
     </div>
 
-    <div class="chat-area">
-        <header>
-            <i class="fas fa-bars" onclick="toggleSidebar()"></i>
-            <span>Veda AI</span>
-            <i class="fas fa-user-circle"></i>
-        </header>
-
-        <div id="chat-box"></div>
-
-        <div class="input-bar">
-            <input type="file" id="img-input" style="display:none" accept="image/*">
-            <button class="img-btn" onclick="document.getElementById('img-input').click()"><i class="fas fa-image"></i></button>
-            <input type="text" id="msg-input" placeholder="Veda se baat karein...">
-            <button onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
-        </div>
+    <!-- Text input row -->
+    <div class="input-wrap">
+      <textarea id="msg-input" rows="1" placeholder="Veda se kuch bhi poochho..."></textarea>
+      <!-- Mic button -->
+      <button class="mic-btn" id="mic-btn" title="Voice Input" onclick="toggleMic()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
+      <!-- Send -->
+      <button class="send-btn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
     </div>
+  </div>
+</div>
 
-    <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        
-        async function sendMsg() {
-            let input = document.getElementById('msg-input');
-            let chatBox = document.getElementById('chat-box');
-            let message = input.value;
-            if(!message) return;
+<!-- HISTORY PANEL -->
+<div id="history-panel">
+  <div class="hp-top">
+    <h2>Chat History</h2>
+    <div class="hp-close" onclick="closeHistory()">✕</div>
+  </div>
+  <div id="history-list"></div>
+</div>
 
-            chatBox.innerHTML += `<div><b>Aap:</b> ${message}</div>`;
-            input.value = "";
+<!-- TOAST -->
+<div id="toast"></div>
 
-            let response = await fetch('/chat', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: message, user_id: "Karisma_123"})
-            });
-            let data = await response.json();
-            chatBox.innerHTML += `<div style="color:#ab47bc"><b>Veda:</b> ${data.reply}</div>`;
-        }
-    </script>
+<!-- HIDDEN INPUTS -->
+<input type="file" id="img-input" accept="image/*" style="display:none" capture="environment"/>
+<input type="file" id="pdf-input" accept=".pdf,application/pdf" style="display:none"/>
+
+<script>
+// ── STARS ─────────────────────────────────────────────────────────────────────
+(function(){
+  const c=document.getElementById('stars'),ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
+  resize();
+  const stars=Array.from({length:90},()=>({
+    x:Math.random()*c.width,y:Math.random()*c.height,
+    r:Math.random()*1.3+0.2,o:Math.random()*0.8+0.1,d:Math.random()>0.5?1:-1
+  }));
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,169,110,${s.o})`;ctx.fill();
+      s.o+=0.004*s.d;
+      if(s.o>0.9||s.o<0.1)s.d*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let userId='',nickname='',currentMode='chat',liveMode=false,searchMode=false;
+let isSending=false,isRecording=false,recognition=null;
+let pendingFile=null,pendingFileType=null,pendingFileB64=null,pendingMime=null,pendingName='';
+let currentTTS=null,currentTTSBtn=null;
+
+const chatWrap=document.getElementById('chat-wrap');
+const msgInput=document.getElementById('msg-input');
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function doLogin(){
+  const name=document.getElementById('ln-name').value.trim();
+  const uid=document.getElementById('ln-uid').value.trim().replace(/\s+/g,'_').toLowerCase();
+  if(!name||!uid){showToast('Naam aur ID dono zaroori hain! 🙏');return}
+  nickname=name;userId=uid;
+  localStorage.setItem('veda_uid',uid);
+  localStorage.setItem('veda_nick',name);
+  startApp();
+}
+
+window.onload=function(){
+  const uid=localStorage.getItem('veda_uid');
+  const nick=localStorage.getItem('veda_nick');
+  if(uid&&nick){userId=uid;nickname=nick;startApp();}
+};
+
+function logout(){localStorage.clear();location.reload()}
+
+function startApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('sb-user').textContent=`Namaste, ${nickname}! 🌸`;
+  loadStats();
+  fetch('/set_nickname',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({user_id:userId,nickname:nickname})
+  }).catch(()=>{});
+  const greet=nickname.toLowerCase().includes('karisma')
+    ?`Pranam, Master Karisma! Main taiyaar hoon — aaj kya sewa karoon aapki? ✨`
+    :`Namaste, ${nickname}! Kaafi dino baad aaye — bahut intezaar tha. Aaj kya karein? 🌸`;
+  setTimeout(()=>addVedaMsg(greet),450);
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function loadStats(){
+  fetch(`/stats?user_id=${userId}`).then(r=>r.json()).then(d=>{
+    document.getElementById('sb-total').textContent=d.total_messages||0;
+    document.getElementById('sb-since').textContent=d.member_since||'—';
+  }).catch(()=>{});
+}
+
+// ── MODES ─────────────────────────────────────────────────────────────────────
+function setMode(mode,el){
+  currentMode=mode;
+  document.querySelectorAll('.mpill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sb-mode').textContent=el.textContent;
+  const msg={
+    chat:'💬 Chat mode ready!',
+    deep:'🧠 Deep Think on — gehri soch ke jawab dunga.',
+    creative:'✨ Creative mode! Kuch naya hoga.',
+    emotional:'💛 Emotional mode — dil se baat karenge.',
+    task:'📋 Task mode — kaam pe focus!'
+  };
+  addVedaMsg(msg[mode]||'Mode set!');
+}
+
+function toggleLive(){
+  liveMode=!liveMode;
+  document.getElementById('live-toggle').classList.toggle('on',liveMode);
+  document.getElementById('live-ind').classList.toggle('show',liveMode);
+  document.getElementById('status-text').textContent=liveMode?'Live Mode':'Online';
+  addVedaMsg(liveMode?'🎙 Live on! Short aur crisp jawab dunga.':'Live band. Normal chat mode back! 😊');
+}
+
+function toggleSearchMode(){
+  searchMode=!searchMode;
+  document.getElementById('btn-search').classList.toggle('active',searchMode);
+  document.getElementById('mode-label').textContent=searchMode?'🌐 Web Search ON':'Chat Mode';
+  if(searchMode) showToast('🌐 Web Search mode ON — sawaal poochho!');
+  else showToast('Web search band');
+}
+
+// ── MESSAGES ──────────────────────────────────────────────────────────────────
+function removeEmpty(){const e=document.getElementById('empty-s');if(e)e.remove()}
+
+function addVedaMsg(text,timestamp,badge){
+  removeEmpty();
+  const row=document.createElement('div');row.className='msg-row';
+  const msgId='tts_'+Date.now();
+  let badgeHtml=badge?`<span class="msg-badge">${badge}</span>`:'';
+  let timeHtml=timestamp?`<span class="msg-time">${timestamp}</span>`:'';
+  row.innerHTML=`
+    <div class="avatar av-veda">V</div>
+    <div class="msg-body">
+      <div class="bubble bubble-veda">${escHtml(text)}</div>
+      <div class="msg-footer">
+        ${timeHtml}${badgeHtml}
+        <button class="tts-btn" id="${msgId}" onclick="speakText(this,'${escAttr(text)}')">
+          🔊 Awaaz mein suno
+        </button>
+      </div>
+    </div>`;
+  chatWrap.appendChild(row);chatWrap.scrollTop=chatWrap.scrollHeight;
+}
+
+function addUserMsg(text,imgSrc){
+  removeEmpty();
+  const row=document.createElement('div');row.className='msg-row user';
+  const initials=nickname.substring(0,2).toUpperCase();
+  let content='';
+  if(imgSrc) content+=`<img src="${imgSrc}" class="chat-img" alt="image"/>`;
+  if(text) content+=`<div class="bubble bubble-user">${escHtml(text)}</div>`;
+  row.innerHTML=`
+    <div class="avatar av-user">${initials}</div>
+    <div class="msg-body">${content}</div>`;
+  chatWrap.appendChild(row);chatWrap.scrollTop=chatWrap.scrollHeight;
+}
+
+function showTyping(){
+  const row=document.createElement('div');row.className='msg-row';row.id='typing-row';
+  row.innerHTML=`<div class="avatar av-veda">V</div><div class="bubble bubble-veda"><div class="typing-b"><span></span><span></span><span></span></div></div>`;
+  chatWrap.appendChild(row);chatWrap.scrollTop=chatWrap.scrollHeight;
+}
+
+function hideTyping(){const e=document.getElementById('typing-row');if(e)e.remove()}
+
+// ── SEND ──────────────────────────────────────────────────────────────────────
+async function sendMsg(){
+  if(isSending)return;
+  const text=msgInput.value.trim();
+  
+  if(!text&&!pendingFile)return;
+  msgInput.value='';msgInput.style.height='';
+  isSending=true;
+
+  if(pendingFile){
+    await handleFileMessage(text);
+  } else if(searchMode){
+    await handleSearch(text);
+  } else {
+    await handleChat(text);
+  }
+  isSending=false;
+}
+
+async function handleChat(text){
+  addUserMsg(text);showTyping();
+  try{
+    const res=await fetch('/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text,user_id:userId,is_voice:liveMode,mode:currentMode,nickname:nickname})
+    });
+    const d=await res.json();
+    hideTyping();
+    addVedaMsg(d.reply||'Kuch error aaya... 🤔',d.timestamp,'');
+    if(d.total_messages) document.getElementById('sb-total').textContent=d.total_messages;
+  }catch(e){
+    hideTyping();addVedaMsg('Connection mein problem! Dobara try karein. 🙏');
+  }
+}
+
+async function handleSearch(text){
+  addUserMsg(text);showTyping();
+  document.getElementById('status-text').textContent='Searching...';
+  try{
+    const res=await fetch('/chat/search',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text,user_id:userId})
+    });
+    const d=await res.json();
+    hideTyping();
+    document.getElementById('status-text').textContent='Online';
+    addVedaMsg(d.reply,d.timestamp,'🌐 Web');
+    if(d.total_messages) document.getElementById('sb-total').textContent=d.total_messages;
+  }catch(e){
+    hideTyping();document.getElementById('status-text').textContent='Online';
+    addVedaMsg('Web search mein error aaya. 🌐');
+  }
+}
+
+async function handleFileMessage(caption){
+  const imgSrc=pendingFileType==='image'?`data:${pendingMime};base64,${pendingFileB64}`:null;
+  addUserMsg(caption||(pendingFileType==='image'?'Is image mein kya hai?':'Is PDF ko samjhao'),imgSrc);
+  showTyping();
+
+  const endpoint=pendingFileType==='image'?'/chat/image':'/chat/pdf';
+  const bodyKey=pendingFileType==='image'?'image_b64':'pdf_b64';
+  const body={
+    [bodyKey]:pendingFileB64,
+    message:caption||(pendingFileType==='image'?'Is image mein kya hai?':'Is PDF ka summary batao.'),
+    user_id:userId,
+    mime_type:pendingMime,
+    filename:pendingName
+  };
+
+  try{
+    const res=await fetch(endpoint,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    const d=await res.json();
+    hideTyping();
+    const badge=pendingFileType==='image'?'📸 Vision':'📄 PDF';
+    addVedaMsg(d.reply,d.timestamp,badge);
+    if(d.total_messages) document.getElementById('sb-total').textContent=d.total_messages;
+  }catch(e){
+    hideTyping();addVedaMsg('File process nahi hua. Dobara try karein! 🙏');
+  }
+  clearUpload();
+}
+
+function quickAsk(text){
+  msgInput.value=text;sendMsg();
+}
+
+// ── FILE UPLOAD ────────────────────────────────────────────────────────────────
+function triggerImageUpload(){
+  document.getElementById('img-input').click();
+}
+function triggerPdfUpload(){
+  document.getElementById('pdf-input').click();
+}
+
+document.getElementById('img-input').addEventListener('change',function(e){
+  const file=e.target.files[0];if(!file)return;
+  loadFileAsB64(file,'image');
+  e.target.value='';
+});
+
+document.getElementById('pdf-input').addEventListener('change',function(e){
+  const file=e.target.files[0];if(!file)return;
+  loadFileAsB64(file,'pdf');
+  e.target.value='';
+});
+
+function loadFileAsB64(file,type){
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const b64=ev.target.result.split(',')[1];
+    pendingFile=file;pendingFileType=type;pendingFileB64=b64;
+    pendingMime=file.type;pendingName=file.name;
+    showUploadPreview(file,type,ev.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showUploadPreview(file,type,dataUrl){
+  const preview=document.getElementById('upload-preview');
+  const thumb=document.getElementById('preview-thumb');
+  const name=document.getElementById('preview-name');
+  const typeSpan=document.getElementById('preview-type');
+  
+  if(type==='image'){
+    thumb.src=dataUrl;thumb.style.display='block';
+    typeSpan.textContent='IMG';
+  } else {
+    thumb.style.display='none';
+    typeSpan.textContent='PDF';
+  }
+  name.textContent=file.name;
+  preview.classList.add('show');
+  document.getElementById('btn-camera').classList.toggle('active',type==='image');
+  document.getElementById('btn-pdf').classList.toggle('active',type==='pdf');
+  showToast(type==='image'?'📸 Image ready! Question type karo':'📄 PDF ready! Sawaal karo');
+}
+
+function clearUpload(){
+  pendingFile=pendingFileType=pendingFileB64=pendingMime=null;pendingName='';
+  document.getElementById('upload-preview').classList.remove('show');
+  document.getElementById('preview-thumb').src='';
+  document.getElementById('btn-camera').classList.remove('active');
+  document.getElementById('btn-pdf').classList.remove('active');
+}
+
+// ── VOICE INPUT (STT) ─────────────────────────────────────────────────────────
+function toggleMic(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    showToast('Voice input is browser mein supported nahi 😔');return;
+  }
+  if(isRecording){stopMic();return;}
+  
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();
+  recognition.lang='hi-IN';
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  
+  recognition.onstart=()=>{
+    isRecording=true;
+    document.getElementById('mic-btn').classList.add('recording');
+    document.getElementById('status-text').textContent='Sun raha hoon...';
+    showToast('🎤 Bol rahe hain...');
+  };
+  recognition.onresult=(e)=>{
+    let transcript='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      transcript+=e.results[i][0].transcript;
+    }
+    msgInput.value=transcript;
+    msgInput.style.height='';
+    msgInput.style.height=Math.min(msgInput.scrollHeight,110)+'px';
+  };
+  recognition.onend=()=>{
+    isRecording=false;
+    document.getElementById('mic-btn').classList.remove('recording');
+    document.getElementById('status-text').textContent='Online';
+    if(msgInput.value.trim()) sendMsg();
+  };
+  recognition.onerror=(e)=>{
+    isRecording=false;
+    document.getElementById('mic-btn').classList.remove('recording');
+    document.getElementById('status-text').textContent='Online';
+    if(e.error!=='aborted') showToast('Voice error: '+e.error);
+  };
+  recognition.start();
+}
+
+function stopMic(){
+  if(recognition){recognition.stop();recognition=null;}
+}
+
+// ── TTS ───────────────────────────────────────────────────────────────────────
+function speakText(btn,text){
+  if(!('speechSynthesis' in window)){showToast('TTS is browser mein nahi hai 😔');return;}
+  
+  if(currentTTS&&speechSynthesis.speaking){
+    speechSynthesis.cancel();
+    if(currentTTSBtn){
+      currentTTSBtn.innerHTML='🔊 Awaaz mein suno';
+      currentTTSBtn.classList.remove('playing');
+    }
+    if(currentTTSBtn===btn){currentTTS=null;currentTTSBtn=null;return;}
+  }
+  
+  const cleanText=text.replace(/[✨🌸🙏💛🧠📋🎙🔴📸📄🌐💬]/gu,'').trim();
+  const utt=new SpeechSynthesisUtterance(cleanText);
+  utt.lang='hi-IN';utt.rate=0.9;utt.pitch=1.05;utt.volume=1;
+  
+  const voices=speechSynthesis.getVoices();
+  const hiVoice=voices.find(v=>v.lang==='hi-IN')||voices.find(v=>v.lang.startsWith('hi'))||null;
+  if(hiVoice) utt.voice=hiVoice;
+  
+  utt.onstart=()=>{
+    btn.innerHTML='⏹ Ruk jao <span class="tts-waves"><span></span><span></span><span></span><span></span><span></span></span>';
+    btn.classList.add('playing');
+    currentTTS=utt;currentTTSBtn=btn;
+  };
+  utt.onend=utt.onerror=()=>{
+    btn.innerHTML='🔊 Awaaz mein suno';
+    btn.classList.remove('playing');
+    currentTTS=null;currentTTSBtn=null;
+  };
+  speechSynthesis.speak(utt);
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────────────────────────
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('s-overlay').classList.add('open');
+  loadStats();
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('s-overlay').classList.remove('open');
+}
+
+// ── HISTORY ───────────────────────────────────────────────────────────────────
+function openHistory(){
+  document.getElementById('history-panel').classList.add('open');
+  const list=document.getElementById('history-list');
+  list.innerHTML='<div style="color:var(--text3);text-align:center;padding:30px;font-size:14px">Loading...</div>';
+  fetch(`/history?user_id=${userId}`).then(r=>r.json()).then(d=>{
+    if(!d.history||!d.history.length){
+      list.innerHTML='<div style="color:var(--text3);text-align:center;padding:50px 20px;font-size:14px">Abhi koi history nahi hai.<br>Veda se baat karo! 🌸</div>';
+      return;
+    }
+    list.innerHTML='';
+    [...d.history].reverse().forEach(h=>{
+      const div=document.createElement('div');div.className='hi';
+      const modeIcons={chat:'💬',deep:'🧠',creative:'✨',emotional:'💛',task:'📋',vision:'📸',pdf:'📄',search:'🌐'};
+      div.innerHTML=`
+        <div class="hi-u">👤 ${escHtml(h.user||'')}</div>
+        <div class="hi-v">🌸 ${escHtml((h.veda||'').substring(0,150))}${(h.veda||'').length>150?'...':''}</div>
+        <div class="hi-foot">
+          <span class="hi-t">${h.timestamp||''}</span>
+          <span class="hi-mode">${modeIcons[h.mode]||'💬'} ${h.mode||'chat'}</span>
+        </div>`;
+      list.appendChild(div);
+    });
+  }).catch(()=>{list.innerHTML='<div style="color:var(--text3);text-align:center;padding:30px">Load nahi hua 😔</div>'});
+}
+
+function closeHistory(){document.getElementById('history-panel').classList.remove('open')}
+
+function clearHistory(){
+  if(!confirm('Poori history delete karein? Yeh wapas nahi aayegi.'))return;
+  fetch('/clear_history',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({user_id:userId})
+  }).then(()=>{showToast('History saaf ho gayi! ✨');closeSidebar();}).catch(()=>showToast('Error aaya!'));
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function escAttr(s){
+  return String(s).replace(/'/g,"\\'").replace(/\n/g,' ').substring(0,200);
+}
+
+// ── INPUT AUTO-RESIZE ─────────────────────────────────────────────────────────
+msgInput.addEventListener('input',function(){
+  this.style.height='';this.style.height=Math.min(this.scrollHeight,110)+'px';
+});
+msgInput.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+});
+
+// Load voices for TTS when ready
+if('speechSynthesis' in window){
+  speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+  speechSynthesis.getVoices();
+}
+</script>
 </body>
 </html>

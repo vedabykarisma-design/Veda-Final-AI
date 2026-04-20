@@ -1,6 +1,14 @@
 # Workspace
 
-## Overview
+## Veda AI — Python/Flask App
+
+**Primary App**: `main.py` (Flask) + `templates/index.html` — Royal Gold UI, Gemini AI
+- **Run**: Workflow "Veda AI Flask App" → `python3 main.py` on port 8080
+- **Secrets needed**: `GEMINI_API_KEY`, `SESSION_SECRET`
+- **Features**: Text chat, Vision (image), PDF reading, Web Search, Voice mic (STT), TTS, Sidebar, History
+- **Stack**: Python 3.11 + Flask + google-generativeai + PyPDF2 + requests/beautifulsoup4
+
+## Overview (monorepo)
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
 
