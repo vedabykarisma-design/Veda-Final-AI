@@ -1,5 +1,5 @@
 kind = "web"
-previewPath = "/"
+previewPath = "/__chat-app"
 title = "Chat App"
 version = "1.0.0"
 id = "artifacts/chat-app"
@@ -11,7 +11,7 @@ version = "1.0.0"
 
 [[services]]
 name = "web"
-paths = [ "/" ]
+paths = [ "/__chat-app" ]
 localPort = 18228
 
 [services.development]
