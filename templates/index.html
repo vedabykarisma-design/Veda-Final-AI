@@ -210,7 +210,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 }
 .av-veda{background:linear-gradient(135deg,#c8a96e,#e8c98a);color:#0d0d1a;box-shadow:0 0 14px rgba(200,169,110,0.35)}
 .av-user{background:var(--surface2);border:1px solid var(--border2);color:var(--gold)}
-.msg-body{max-width:78%}
+.msg-body{max-width:78%; display:flex; flex-direction:column;}
 .bubble{
   padding:11px 15px;border-radius:18px;
   font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word;
@@ -226,6 +226,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .msg-footer{
   display:flex;align-items:center;gap:8px;margin-top:4px;padding:0 4px;
 }
+.msg-row.user .msg-footer { justify-content: flex-end; }
 .msg-time{font-size:10px;color:var(--text3)}
 .msg-badge{
   font-size:10px;padding:2px 8px;border-radius:10px;
@@ -252,7 +253,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
 /* Image preview in chat */
 .chat-img{
-  max-width:220px;border-radius:12px;border:1px solid var(--border2);
+  max-width:100%;border-radius:12px;border:1px solid var(--border2);
   margin-bottom:6px;display:block;
 }
 
@@ -260,6 +261,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .empty-s{
   display:flex;flex-direction:column;align-items:center;
   justify-content:center;flex:1;gap:10px;padding:40px 20px;
+  height: 100%;
 }
 .empty-v{font-family:var(--font-d);font-size:72px;color:var(--gold);opacity:0.3;line-height:1}
 .empty-t{font-size:14px;color:var(--text3);text-align:center;line-height:1.7;max-width:260px}
@@ -304,7 +306,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 }
 .ia-btn:hover{background:var(--surface3);border-color:var(--border2)}
 .ia-btn.active{background:var(--goldglow);border-color:var(--gold)}
-.ia-btn svg{width:16px;height:16px}
+.ia-btn svg{width:16px;height:16px;stroke:var(--gold)}
 .ia-label{font-size:10px;color:var(--text3);flex:1;padding-left:2px}
 .input-wrap{
   display:flex;gap:9px;align-items:flex-end;
@@ -326,11 +328,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;transition:all 0.2s;
 }
+.mic-btn svg{width: 18px; height: 18px; stroke: var(--gold);}
 .mic-btn:hover{border-color:var(--gold);background:var(--goldglow)}
 .mic-btn.recording{
   background:var(--accent);border-color:var(--accent);
   animation:micPulse 1s infinite;
 }
+.mic-btn.recording svg {stroke: white;}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,92,92,0.4)}50%{box-shadow:0 0 0 8px rgba(224,92,92,0)}}
 .send-btn{
   width:38px;height:38px;border-radius:50%;flex-shrink:0;
@@ -342,7 +346,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 }
 .send-btn:hover{opacity:0.88}
 .send-btn:active{transform:scale(0.92)}
-.send-btn svg{width:16px;height:16px;fill:#0d0d1a}
+.send-btn svg{width:18px;height:18px;stroke:#0d0d1a}
 
 /* ── HISTORY PANEL ── */
 #history-panel{
@@ -367,7 +371,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   background:var(--surface);border:1px solid var(--border);
   border-radius:13px;padding:13px 15px;margin-bottom:10px;
 }
-.hi-u{font-size:13px;color:var(--text2);margin-bottom:5px}
+.hi-u{font-size:13px;color:var(--text2);margin-bottom:5px; font-weight: bold;}
 .hi-v{font-size:13px;color:var(--text);line-height:1.55}
 .hi-foot{display:flex;align-items:center;gap:8px;margin-top:7px}
 .hi-t{font-size:10px;color:var(--text3)}
@@ -388,7 +392,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ── TTS WAVES ── */
-.tts-waves{display:inline-flex;gap:2px;align-items:center;height:14px;margin-left:3px}
+.tts-waves{display:none;gap:2px;align-items:center;height:14px;margin-left:3px}
+.playing .tts-waves {display: inline-flex;}
 .tts-waves span{
   width:2px;border-radius:2px;background:var(--gold);
   animation:wave 0.8s infinite ease-in-out;
@@ -412,7 +417,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 <body>
 <canvas id="stars"></canvas>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-glow"></div>
   <div class="login-logo">Veda</div>
@@ -431,10 +435,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   </div>
 </div>
 
-<!-- SIDEBAR OVERLAY -->
 <div class="s-overlay" id="s-overlay" onclick="closeSidebar()"></div>
 
-<!-- SIDEBAR -->
 <div id="sidebar">
   <div class="sb-head">
     <div class="sb-logo">Veda</div>
@@ -459,7 +461,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
     Chat History
   </button>
-  <button class="sb-btn" onclick="clearHistory()">
+  <button class="sb-btn" onclick="clearHistory();closeSidebar()">
     <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6M14,11v6"/></svg>
     History Saaf Karein
   </button>
@@ -474,9 +476,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
-  <!-- TOPBAR -->
   <div id="topbar">
     <div class="tb-icon-btn" onclick="openSidebar()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2.2">
@@ -493,561 +493,511 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     <button class="tb-live-btn" id="live-toggle" onclick="toggleLive()">🎙 Live</button>
   </div>
 
-  <!-- MODE PILLS -->
   <div id="mode-bar">
-    <button class="mpill active" onclick="setMode('chat',this)">💬 Chat</button>
-    <button class="mpill" onclick="setMode('deep',this)">🧠 Deep Think</button>
-    <button class="mpill" onclick="setMode('creative',this)">✨ Creative</button>
-    <button class="mpill" onclick="setMode('emotional',this)">💛 Emotional</button>
-    <button class="mpill" onclick="setMode('task',this)">📋 Task</button>
+    <button class="mpill active" id="mode-chat" onclick="setMode('chat')">💬 Normal Chat</button>
+    <button class="mpill" id="mode-search" onclick="setMode('search')">🌍 Web Search</button>
+    <button class="mpill" id="mode-image" onclick="setMode('image')">👁️ Vision (Image)</button>
+    <button class="mpill" id="mode-pdf" onclick="setMode('pdf')">📄 Read PDF</button>
   </div>
 
-  <!-- CHAT -->
   <div id="chat-wrap">
-    <div class="empty-s" id="empty-s">
+    <div class="empty-s" id="empty-state">
       <div class="empty-v">V</div>
-      <div class="empty-t">Veda aapka intezaar kar rahi thi.<br>Kuch bhi poochho — main yahaan hoon. 🌸</div>
+      <div class="empty-t">Pranam! Main Veda hoon.<br>Aap mujhse kuch bhi pooch sakte hain.</div>
       <div class="empty-chips">
-        <div class="chip" onclick="quickAsk('Mujhe apna parichay do')">Parichay do</div>
-        <div class="chip" onclick="quickAsk('Aaj mera mood kharab hai, help karo')">Mood theek karo</div>
-        <div class="chip" onclick="quickAsk('Python sikhao mujhe')">Python sikhao</div>
-        <div class="chip" onclick="quickAsk('Ek creative story likho')">Story likho</div>
+        <div class="chip" onclick="quickSend('Kavita sunao')">Kavita sunao ✨</div>
+        <div class="chip" onclick="quickSend('Aaj ka mausam kaisa hai?')">Mausam ki jankari 🌤️</div>
       </div>
     </div>
   </div>
 
-  <!-- LIVE INDICATOR -->
-  <div class="live-ind" id="live-ind">🔴 Live Mode — Bol ke type karo</div>
+  <div class="live-ind" id="live-ind">🎙️ Veda sun rahi hai... Boliye!</div>
 
-  <!-- UPLOAD PREVIEW -->
   <div id="upload-preview">
-    <img id="preview-thumb" src="" alt="preview" style="display:none"/>
-    <span id="preview-name">file.pdf</span>
-    <span id="preview-type">IMG</span>
-    <button id="preview-close" onclick="clearUpload()">✕</button>
+    <img id="preview-thumb" src="" alt="preview" style="display:none;"/>
+    <div style="display:flex; flex-direction:column; flex:1;">
+      <span id="preview-name">File Name</span>
+      <span id="preview-type">Image</span>
+    </div>
+    <button id="preview-close" onclick="clearUpload()">×</button>
   </div>
 
-  <!-- INPUT AREA -->
   <div id="input-area">
-    <!-- Action buttons row -->
     <div class="input-actions">
-      <!-- Camera / Gallery -->
-      <div class="ia-btn" id="btn-camera" title="Camera / Gallery" onclick="triggerImageUpload()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
-          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-          <circle cx="12" cy="13" r="4"/>
-        </svg>
+      <input type="file" id="file-img" accept="image/*" hidden onchange="handleFile(this, 'image')">
+      <input type="file" id="file-pdf" accept="application/pdf" hidden onchange="handleFile(this, 'pdf')">
+
+      <div class="ia-btn" onclick="document.getElementById('file-img').click()" title="Upload Image">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       </div>
-      <!-- PDF -->
-      <div class="ia-btn" id="btn-pdf" title="PDF Upload" onclick="triggerPdfUpload()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="9" y1="13" x2="15" y2="13"/>
-          <line x1="9" y1="17" x2="11" y2="17"/>
-        </svg>
+      <div class="ia-btn" onclick="document.getElementById('file-pdf').click()" title="Upload PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       </div>
-      <!-- Web Search -->
-      <div class="ia-btn" id="btn-search" title="Web Search" onclick="toggleSearchMode()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
-      </div>
-      <span class="ia-label" id="mode-label">Chat Mode</span>
+      <div class="ia-label" id="action-label">Koi file chunein (Optional)</div>
     </div>
 
-    <!-- Text input row -->
     <div class="input-wrap">
-      <textarea id="msg-input" rows="1" placeholder="Veda se kuch bhi poochho..."></textarea>
-      <!-- Mic button -->
-      <button class="mic-btn" id="mic-btn" title="Voice Input" onclick="toggleMic()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          <line x1="12" y1="19" x2="12" y2="23"/>
-          <line x1="8" y1="23" x2="16" y2="23"/>
-        </svg>
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </button>
-      <!-- Send -->
-      <button class="send-btn" onclick="sendMsg()">
-        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      <textarea id="msg-input" placeholder="Veda se baat karein..." rows="1" oninput="this.style.height='';this.style.height=this.scrollHeight+'px'"></textarea>
+      <button class="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
   </div>
 </div>
 
-<!-- HISTORY PANEL -->
 <div id="history-panel">
   <div class="hp-top">
-    <h2>Chat History</h2>
-    <div class="hp-close" onclick="closeHistory()">✕</div>
+    <h2>Purani Baatein</h2>
+    <div class="hp-close" onclick="closeHistory()">×</div>
   </div>
   <div id="history-list"></div>
 </div>
 
-<!-- TOAST -->
-<div id="toast"></div>
-
-<!-- HIDDEN INPUTS -->
-<input type="file" id="img-input" accept="image/*" style="display:none" capture="environment"/>
-<input type="file" id="pdf-input" accept=".pdf,application/pdf" style="display:none"/>
+<div id="toast">Message saved!</div>
 
 <script>
-// ── STARS ─────────────────────────────────────────────────────────────────────
-(function(){
-  const c=document.getElementById('stars'),ctx=c.getContext('2d');
-  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
-  resize();
-  const stars=Array.from({length:90},()=>({
-    x:Math.random()*c.width,y:Math.random()*c.height,
-    r:Math.random()*1.3+0.2,o:Math.random()*0.8+0.1,d:Math.random()>0.5?1:-1
-  }));
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(s=>{
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(200,169,110,${s.o})`;ctx.fill();
-      s.o+=0.004*s.d;
-      if(s.o>0.9||s.o<0.1)s.d*=-1;
+// --- GLOBAL VARIABLES ---
+let user = { name: '', id: '', since: '', totalMsgs: 0 };
+let currentMode = 'chat'; // chat, search, image, pdf
+let uploadedFile = null; // { type: 'image'|'pdf', b64: '...', name: '...' }
+let isRecording = false;
+let recognition = null;
+let synth = window.speechSynthesis;
+
+// --- INITIALIZATION ---
+window.onload = () => {
+    drawStars();
+    checkLogin();
+    setupSpeechRecognition();
+
+    // Enter key to send
+    document.getElementById('msg-input').addEventListener('keypress', function(e) {
+        if(e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
     });
-    requestAnimationFrame(draw);
-  }
-  draw();
-  window.addEventListener('resize',resize);
-})();
-
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let userId='',nickname='',currentMode='chat',liveMode=false,searchMode=false;
-let isSending=false,isRecording=false,recognition=null;
-let pendingFile=null,pendingFileType=null,pendingFileB64=null,pendingMime=null,pendingName='';
-let currentTTS=null,currentTTSBtn=null;
-
-const chatWrap=document.getElementById('chat-wrap');
-const msgInput=document.getElementById('msg-input');
-
-// ── LOGIN ─────────────────────────────────────────────────────────────────────
-function doLogin(){
-  const name=document.getElementById('ln-name').value.trim();
-  const uid=document.getElementById('ln-uid').value.trim().replace(/\s+/g,'_').toLowerCase();
-  if(!name||!uid){showToast('Naam aur ID dono zaroori hain! 🙏');return}
-  nickname=name;userId=uid;
-  localStorage.setItem('veda_uid',uid);
-  localStorage.setItem('veda_nick',name);
-  startApp();
-}
-
-window.onload=function(){
-  const uid=localStorage.getItem('veda_uid');
-  const nick=localStorage.getItem('veda_nick');
-  if(uid&&nick){userId=uid;nickname=nick;startApp();}
 };
 
-function logout(){localStorage.clear();location.reload()}
-
-function startApp(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='flex';
-  document.getElementById('sb-user').textContent=`Namaste, ${nickname}! 🌸`;
-  loadStats();
-  fetch('/set_nickname',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({user_id:userId,nickname:nickname})
-  }).catch(()=>{});
-  const greet=nickname.toLowerCase().includes('karisma')
-    ?`Pranam, Master Karisma! Main taiyaar hoon — aaj kya sewa karoon aapki? ✨`
-    :`Namaste, ${nickname}! Kaafi dino baad aaye — bahut intezaar tha. Aaj kya karein? 🌸`;
-  setTimeout(()=>addVedaMsg(greet),450);
-}
-
-// ── STATS ─────────────────────────────────────────────────────────────────────
-function loadStats(){
-  fetch(`/stats?user_id=${userId}`).then(r=>r.json()).then(d=>{
-    document.getElementById('sb-total').textContent=d.total_messages||0;
-    document.getElementById('sb-since').textContent=d.member_since||'—';
-  }).catch(()=>{});
-}
-
-// ── MODES ─────────────────────────────────────────────────────────────────────
-function setMode(mode,el){
-  currentMode=mode;
-  document.querySelectorAll('.mpill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('sb-mode').textContent=el.textContent;
-  const msg={
-    chat:'💬 Chat mode ready!',
-    deep:'🧠 Deep Think on — gehri soch ke jawab dunga.',
-    creative:'✨ Creative mode! Kuch naya hoga.',
-    emotional:'💛 Emotional mode — dil se baat karenge.',
-    task:'📋 Task mode — kaam pe focus!'
-  };
-  addVedaMsg(msg[mode]||'Mode set!');
-}
-
-function toggleLive(){
-  liveMode=!liveMode;
-  document.getElementById('live-toggle').classList.toggle('on',liveMode);
-  document.getElementById('live-ind').classList.toggle('show',liveMode);
-  document.getElementById('status-text').textContent=liveMode?'Live Mode':'Online';
-  addVedaMsg(liveMode?'🎙 Live on! Short aur crisp jawab dunga.':'Live band. Normal chat mode back! 😊');
-}
-
-function toggleSearchMode(){
-  searchMode=!searchMode;
-  document.getElementById('btn-search').classList.toggle('active',searchMode);
-  document.getElementById('mode-label').textContent=searchMode?'🌐 Web Search ON':'Chat Mode';
-  if(searchMode) showToast('🌐 Web Search mode ON — sawaal poochho!');
-  else showToast('Web search band');
-}
-
-// ── MESSAGES ──────────────────────────────────────────────────────────────────
-function removeEmpty(){const e=document.getElementById('empty-s');if(e)e.remove()}
-
-function addVedaMsg(text,timestamp,badge){
-  removeEmpty();
-  const row=document.createElement('div');row.className='msg-row';
-  const msgId='tts_'+Date.now();
-  let badgeHtml=badge?`<span class="msg-badge">${badge}</span>`:'';
-  let timeHtml=timestamp?`<span class="msg-time">${timestamp}</span>`:'';
-  row.innerHTML=`
-    <div class="avatar av-veda">V</div>
-    <div class="msg-body">
-      <div class="bubble bubble-veda">${escHtml(text)}</div>
-      <div class="msg-footer">
-        ${timeHtml}${badgeHtml}
-        <button class="tts-btn" id="${msgId}" onclick="speakText(this,'${escAttr(text)}')">
-          🔊 Awaaz mein suno
-        </button>
-      </div>
-    </div>`;
-  chatWrap.appendChild(row);chatWrap.scrollTop=chatWrap.scrollHeight;
-}
-
-function addUserMsg(text,imgSrc){
-  removeEmpty();
-  const row=document.createElement('div');row.className='msg-row user';
-  const initials=nickname.substring(0,2).toUpperCase();
-  let content='';
-  if(imgSrc) content+=`<img src="${imgSrc}" class="chat-img" alt="image"/>`;
-  if(text) content+=`<div class="bubble bubble-user">${escHtml(text)}</div>`;
-  row.innerHTML=`
-    <div class="avatar av-user">${initials}</div>
-    <div class="msg-body">${content}</div>`;
-  chatWrap.appendChild(row);chatWrap.scrollTop=chatWrap.scrollHeight;
-}
-
-function showTyping(){
-  const row=document.createElement('div');row.className='msg-row';row.id='typing-row';
-  row.innerHTML=`<div class="avatar av-veda">V</div><div class="bubble bubble-veda"><div class="typing-b"><span></span><span></span><span></span></div></div>`;
-  chatWrap.appendChild(row);chatWrap.scrollTop=chatWrap.scrollHeight;
-}
-
-function hideTyping(){const e=document.getElementById('typing-row');if(e)e.remove()}
-
-// ── SEND ──────────────────────────────────────────────────────────────────────
-async function sendMsg(){
-  if(isSending)return;
-  const text=msgInput.value.trim();
-  
-  if(!text&&!pendingFile)return;
-  msgInput.value='';msgInput.style.height='';
-  isSending=true;
-
-  if(pendingFile){
-    await handleFileMessage(text);
-  } else if(searchMode){
-    await handleSearch(text);
-  } else {
-    await handleChat(text);
-  }
-  isSending=false;
-}
-
-async function handleChat(text){
-  addUserMsg(text);showTyping();
-  try{
-    const res=await fetch('/chat',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:text,user_id:userId,is_voice:liveMode,mode:currentMode,nickname:nickname})
-    });
-    const d=await res.json();
-    hideTyping();
-    addVedaMsg(d.reply||'Kuch error aaya... 🤔',d.timestamp,'');
-    if(d.total_messages) document.getElementById('sb-total').textContent=d.total_messages;
-  }catch(e){
-    hideTyping();addVedaMsg('Connection mein problem! Dobara try karein. 🙏');
-  }
-}
-
-async function handleSearch(text){
-  addUserMsg(text);showTyping();
-  document.getElementById('status-text').textContent='Searching...';
-  try{
-    const res=await fetch('/chat/search',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:text,user_id:userId})
-    });
-    const d=await res.json();
-    hideTyping();
-    document.getElementById('status-text').textContent='Online';
-    addVedaMsg(d.reply,d.timestamp,'🌐 Web');
-    if(d.total_messages) document.getElementById('sb-total').textContent=d.total_messages;
-  }catch(e){
-    hideTyping();document.getElementById('status-text').textContent='Online';
-    addVedaMsg('Web search mein error aaya. 🌐');
-  }
-}
-
-async function handleFileMessage(caption){
-  const imgSrc=pendingFileType==='image'?`data:${pendingMime};base64,${pendingFileB64}`:null;
-  addUserMsg(caption||(pendingFileType==='image'?'Is image mein kya hai?':'Is PDF ko samjhao'),imgSrc);
-  showTyping();
-
-  const endpoint=pendingFileType==='image'?'/chat/image':'/chat/pdf';
-  const bodyKey=pendingFileType==='image'?'image_b64':'pdf_b64';
-  const body={
-    [bodyKey]:pendingFileB64,
-    message:caption||(pendingFileType==='image'?'Is image mein kya hai?':'Is PDF ka summary batao.'),
-    user_id:userId,
-    mime_type:pendingMime,
-    filename:pendingName
-  };
-
-  try{
-    const res=await fetch(endpoint,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(body)
-    });
-    const d=await res.json();
-    hideTyping();
-    const badge=pendingFileType==='image'?'📸 Vision':'📄 PDF';
-    addVedaMsg(d.reply,d.timestamp,badge);
-    if(d.total_messages) document.getElementById('sb-total').textContent=d.total_messages;
-  }catch(e){
-    hideTyping();addVedaMsg('File process nahi hua. Dobara try karein! 🙏');
-  }
-  clearUpload();
-}
-
-function quickAsk(text){
-  msgInput.value=text;sendMsg();
-}
-
-// ── FILE UPLOAD ────────────────────────────────────────────────────────────────
-function triggerImageUpload(){
-  document.getElementById('img-input').click();
-}
-function triggerPdfUpload(){
-  document.getElementById('pdf-input').click();
-}
-
-document.getElementById('img-input').addEventListener('change',function(e){
-  const file=e.target.files[0];if(!file)return;
-  loadFileAsB64(file,'image');
-  e.target.value='';
-});
-
-document.getElementById('pdf-input').addEventListener('change',function(e){
-  const file=e.target.files[0];if(!file)return;
-  loadFileAsB64(file,'pdf');
-  e.target.value='';
-});
-
-function loadFileAsB64(file,type){
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    const b64=ev.target.result.split(',')[1];
-    pendingFile=file;pendingFileType=type;pendingFileB64=b64;
-    pendingMime=file.type;pendingName=file.name;
-    showUploadPreview(file,type,ev.target.result);
-  };
-  reader.readAsDataURL(file);
-}
-
-function showUploadPreview(file,type,dataUrl){
-  const preview=document.getElementById('upload-preview');
-  const thumb=document.getElementById('preview-thumb');
-  const name=document.getElementById('preview-name');
-  const typeSpan=document.getElementById('preview-type');
-  
-  if(type==='image'){
-    thumb.src=dataUrl;thumb.style.display='block';
-    typeSpan.textContent='IMG';
-  } else {
-    thumb.style.display='none';
-    typeSpan.textContent='PDF';
-  }
-  name.textContent=file.name;
-  preview.classList.add('show');
-  document.getElementById('btn-camera').classList.toggle('active',type==='image');
-  document.getElementById('btn-pdf').classList.toggle('active',type==='pdf');
-  showToast(type==='image'?'📸 Image ready! Question type karo':'📄 PDF ready! Sawaal karo');
-}
-
-function clearUpload(){
-  pendingFile=pendingFileType=pendingFileB64=pendingMime=null;pendingName='';
-  document.getElementById('upload-preview').classList.remove('show');
-  document.getElementById('preview-thumb').src='';
-  document.getElementById('btn-camera').classList.remove('active');
-  document.getElementById('btn-pdf').classList.remove('active');
-}
-
-// ── VOICE INPUT (STT) ─────────────────────────────────────────────────────────
-function toggleMic(){
-  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
-    showToast('Voice input is browser mein supported nahi 😔');return;
-  }
-  if(isRecording){stopMic();return;}
-  
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  recognition=new SR();
-  recognition.lang='hi-IN';
-  recognition.continuous=false;
-  recognition.interimResults=true;
-  
-  recognition.onstart=()=>{
-    isRecording=true;
-    document.getElementById('mic-btn').classList.add('recording');
-    document.getElementById('status-text').textContent='Sun raha hoon...';
-    showToast('🎤 Bol rahe hain...');
-  };
-  recognition.onresult=(e)=>{
-    let transcript='';
-    for(let i=e.resultIndex;i<e.results.length;i++){
-      transcript+=e.results[i][0].transcript;
+// --- STAR BACKGROUND (CANVAS) ---
+function drawStars() {
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const stars = [];
+    for(let i=0; i<150; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5,
+            a: Math.random() * Math.PI * 2
+        });
     }
-    msgInput.value=transcript;
-    msgInput.style.height='';
-    msgInput.style.height=Math.min(msgInput.scrollHeight,110)+'px';
-  };
-  recognition.onend=()=>{
-    isRecording=false;
+    function render() {
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+        ctx.fillStyle = '#c8a96e';
+        stars.forEach(s => {
+            ctx.globalAlpha = 0.3 + Math.sin(s.a)*0.2;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+            ctx.fill();
+            s.a += 0.05;
+            s.y -= 0.2;
+            if(s.y < 0) s.y = canvas.height;
+        });
+        requestAnimationFrame(render);
+    }
+    render();
+}
+
+// --- LOGIN & AUTH ---
+function checkLogin() {
+    const savedUser = localStorage.getItem('veda_user');
+    if(savedUser) {
+        user = JSON.parse(savedUser);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        updateSidebar();
+        loadHistoryToChat();
+    }
+}
+
+function doLogin() {
+    const name = document.getElementById('ln-name').value.trim();
+    const uid = document.getElementById('ln-uid').value.trim();
+    if(!name || !uid) return showToast("Kripya Naam aur ID dono bharein!");
+
+    user = {
+        name: name,
+        id: uid,
+        since: new Date().toLocaleDateString(),
+        totalMsgs: 0
+    };
+    localStorage.setItem('veda_user', JSON.stringify(user));
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    updateSidebar();
+    showToast(`Swagat hai, ${name} ji! 🌸`);
+}
+
+function logout() {
+    localStorage.removeItem('veda_user');
+    location.reload();
+}
+
+// --- SIDEBAR ---
+function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('s-overlay').classList.add('open');
+    updateSidebar();
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('s-overlay').classList.remove('open');
+}
+function updateSidebar() {
+    document.getElementById('sb-user').innerText = `Namaste, ${user.name}! 🌸`;
+    document.getElementById('sb-since').innerText = user.since;
+    document.getElementById('sb-total').innerText = user.totalMsgs;
+}
+
+// --- MODE SWITCHING ---
+function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mpill').forEach(el => el.classList.remove('active'));
+    document.getElementById(`mode-${mode}`).classList.add('active');
+
+    let modeNames = { chat: '💬 Chat', search: '🌍 Search', image: '👁️ Vision', pdf: '📄 PDF' };
+    document.getElementById('sb-mode').innerText = modeNames[mode];
+
+    if(mode === 'image' && !uploadedFile) {
+        showToast("Image mode ke liye pehle image upload karein!");
+        document.getElementById('file-img').click();
+    } else if (mode === 'pdf' && !uploadedFile) {
+        showToast("PDF mode ke liye pehle PDF upload karein!");
+        document.getElementById('file-pdf').click();
+    }
+}
+
+// --- FILE HANDLING ---
+function handleFile(input, type) {
+    const file = input.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const b64 = e.target.result.split(',')[1];
+        uploadedFile = { type: type, b64: b64, name: file.name };
+
+        document.getElementById('upload-preview').classList.add('show');
+        document.getElementById('preview-name').innerText = file.name;
+        document.getElementById('preview-type').innerText = type.toUpperCase();
+
+        if(type === 'image') {
+            document.getElementById('preview-thumb').src = e.target.result;
+            document.getElementById('preview-thumb').style.display = 'block';
+            setMode('image');
+        } else {
+            document.getElementById('preview-thumb').style.display = 'none';
+            setMode('pdf');
+        }
+        showToast(`${type} upload ho gaya!`);
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearUpload() {
+    uploadedFile = null;
+    document.getElementById('upload-preview').classList.remove('show');
+    document.getElementById('file-img').value = '';
+    document.getElementById('file-pdf').value = '';
+    setMode('chat');
+}
+
+// --- CHAT LOGIC ---
+function quickSend(text) {
+    document.getElementById('msg-input').value = text;
+    sendMessage();
+}
+
+async function sendMessage() {
+    const input = document.getElementById('msg-input');
+    const text = input.value.trim();
+
+    if(!text && !uploadedFile) return;
+
+    // Hide empty state
+    document.getElementById('empty-state').style.display = 'none';
+
+    // 1. Add User Message
+    addMessageToUI('user', text, currentMode, uploadedFile);
+    input.value = '';
+    input.style.height = '';
+
+    // Save to local history
+    saveToHistory('user', text, currentMode);
+
+    // Show Typing Indicator
+    const typingId = showTyping();
+
+    // 2. Prepare Payload
+    let endpoint = '/chat';
+    let payload = { message: text || "Is file ko describe karein.", user_id: user.id };
+
+    if (currentMode === 'search') {
+        endpoint = '/chat/search';
+    } else if (currentMode === 'image' && uploadedFile?.type === 'image') {
+        endpoint = '/chat/image';
+        payload.image_b64 = uploadedFile.b64;
+    } else if (currentMode === 'pdf' && uploadedFile?.type === 'pdf') {
+        endpoint = '/chat/pdf';
+        payload.pdf_b64 = uploadedFile.b64;
+    }
+
+    // Clear upload preview after sending
+    clearUpload();
+
+    // 3. API Call
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        removeTyping(typingId);
+
+        const vedaReply = data.reply || "Kuch samajh nahi aaya.";
+        addMessageToUI('veda', vedaReply, currentMode);
+        saveToHistory('veda', vedaReply, currentMode);
+
+        // Auto Speak if in Live Mode
+        if(document.getElementById('live-toggle').classList.contains('on')) {
+            speakText(vedaReply);
+        }
+
+    } catch (err) {
+        removeTyping(typingId);
+        addMessageToUI('veda', "Maaf kijiye, server se connect nahi ho paayi. (Error)", 'chat');
+    }
+}
+
+function addMessageToUI(role, text, mode, fileObj = null) {
+    const chatWrap = document.getElementById('chat-wrap');
+    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+    const div = document.createElement('div');
+    div.className = `msg-row ${role}`;
+
+    let avatar = role === 'user' ? `<div class="avatar av-user">${user.name.charAt(0).toUpperCase()}</div>` : `<div class="avatar av-veda">V</div>`;
+
+    let contentHtml = '';
+    if (fileObj && fileObj.type === 'image') {
+        contentHtml += `<img src="data:image/png;base64,${fileObj.b64}" class="chat-img"/>`;
+    } else if (fileObj && fileObj.type === 'pdf') {
+        contentHtml += `<div class="search-badge">📄 ${fileObj.name}</div><br>`;
+    }
+
+    if(mode === 'search' && role === 'user') {
+        contentHtml += `<div class="search-badge">🌍 Web Search</div><br>`;
+    }
+
+    contentHtml += text;
+
+    let ttsBtn = role === 'veda' ? `<button class="tts-btn" onclick="speakText(this.parentElement.parentElement.dataset.text, this)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> Suno <div class="tts-waves"><span></span><span></span><span></span><span></span><span></span></div></button>` : '';
+
+    div.innerHTML = `
+        ${avatar}
+        <div class="msg-body" data-text="${text.replace(/"/g, '&quot;')}">
+            <div class="bubble bubble-${role}">${contentHtml}</div>
+            <div class="msg-footer">
+                <span class="msg-time">${time}</span>
+                ${role === 'user' ? `<span class="msg-badge">${mode}</span>` : ttsBtn}
+            </div>
+        </div>
+    `;
+
+    chatWrap.appendChild(div);
+    chatWrap.scrollTop = chatWrap.scrollHeight;
+
+    if(role === 'user') {
+        user.totalMsgs++;
+        localStorage.setItem('veda_user', JSON.stringify(user));
+    }
+}
+
+function showTyping() {
+    const chatWrap = document.getElementById('chat-wrap');
+    const id = 'typing-' + Date.now();
+    const div = document.createElement('div');
+    div.className = 'msg-row veda';
+    div.id = id;
+    div.innerHTML = `
+        <div class="avatar av-veda">V</div>
+        <div class="msg-body">
+            <div class="bubble bubble-veda">
+                <div class="typing-b"><span></span><span></span><span></span></div>
+            </div>
+        </div>
+    `;
+    chatWrap.appendChild(div);
+    chatWrap.scrollTop = chatWrap.scrollHeight;
+    return id;
+}
+
+function removeTyping(id) {
+    const el = document.getElementById(id);
+    if(el) el.remove();
+}
+
+// --- LOCAL HISTORY ---
+function saveToHistory(role, text, mode) {
+    let history = JSON.parse(localStorage.getItem(`veda_hist_${user.id}`) || '[]');
+    history.push({ role, text, mode, time: new Date().toLocaleString() });
+    localStorage.setItem(`veda_hist_${user.id}`, JSON.stringify(history));
+}
+
+function loadHistoryToChat() {
+    let history = JSON.parse(localStorage.getItem(`veda_hist_${user.id}`) || '[]');
+    if(history.length > 0) {
+        document.getElementById('empty-state').style.display = 'none';
+        history.forEach(h => {
+            // Re-render old messages as plain text (no files preserved in localstorage to save space)
+            addMessageToUI(h.role, h.text, h.mode);
+        });
+    }
+}
+
+function openHistory() {
+    const list = document.getElementById('history-list');
+    list.innerHTML = '';
+    let history = JSON.parse(localStorage.getItem(`veda_hist_${user.id}`) || '[]');
+
+    if(history.length === 0) {
+        list.innerHTML = '<div style="text-align:center;color:#888;margin-top:20px;">Koi history nahi hai.</div>';
+    } else {
+        history.forEach(h => {
+            list.innerHTML += `
+                <div class="hi">
+                    <div class="hi-u">${h.role === 'user' ? 'Aap' : 'Veda'}</div>
+                    <div class="hi-v">${h.text}</div>
+                    <div class="hi-foot">
+                        <span class="hi-t">${h.time}</span>
+                        <span class="hi-mode">${h.mode}</span>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    document.getElementById('history-panel').classList.add('open');
+}
+
+function closeHistory() {
+    document.getElementById('history-panel').classList.remove('open');
+}
+
+function clearHistory() {
+    if(confirm("Kya aap saari baatein delete karna chahte hain?")) {
+        localStorage.removeItem(`veda_hist_${user.id}`);
+        document.getElementById('chat-wrap').innerHTML = `
+            <div class="empty-s" id="empty-state">
+              <div class="empty-v">V</div>
+              <div class="empty-t">History saaf ho gayi hai.<br>Nayi shuruat karein! ✨</div>
+            </div>
+        `;
+        showToast("History delete ho gayi!");
+    }
+}
+
+// --- SPEECH RECOGNITION (MIC) ---
+function setupSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'hi-IN'; // Hindi
+
+        recognition.onstart = () => {
+            isRecording = true;
+            document.getElementById('mic-btn').classList.add('recording');
+            document.getElementById('msg-input').placeholder = "Sun rahi hoon...";
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('msg-input').value = transcript;
+            sendMessage();
+        };
+
+        recognition.onerror = () => { stopMic(); showToast("Aawaz theek se nahi aayi!"); };
+        recognition.onend = () => { stopMic(); };
+    }
+}
+
+function toggleMic() {
+    if(!recognition) return showToast("Aapka browser Voice support nahi karta.");
+    if(isRecording) {
+        recognition.stop();
+    } else {
+        recognition.start();
+    }
+}
+
+function stopMic() {
+    isRecording = false;
     document.getElementById('mic-btn').classList.remove('recording');
-    document.getElementById('status-text').textContent='Online';
-    if(msgInput.value.trim()) sendMsg();
-  };
-  recognition.onerror=(e)=>{
-    isRecording=false;
-    document.getElementById('mic-btn').classList.remove('recording');
-    document.getElementById('status-text').textContent='Online';
-    if(e.error!=='aborted') showToast('Voice error: '+e.error);
-  };
-  recognition.start();
+    document.getElementById('msg-input').placeholder = "Veda se baat karein...";
 }
 
-function stopMic(){
-  if(recognition){recognition.stop();recognition=null;}
-}
+// --- TTS (TEXT TO SPEECH) ---
+function speakText(text, btnElement = null) {
+    if(synth.speaking) synth.cancel();
 
-// ── TTS ───────────────────────────────────────────────────────────────────────
-function speakText(btn,text){
-  if(!('speechSynthesis' in window)){showToast('TTS is browser mein nahi hai 😔');return;}
-  
-  if(currentTTS&&speechSynthesis.speaking){
-    speechSynthesis.cancel();
-    if(currentTTSBtn){
-      currentTTSBtn.innerHTML='🔊 Awaaz mein suno';
-      currentTTSBtn.classList.remove('playing');
+    // Remove emojis and URLs for better reading
+    let cleanText = text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'hi-IN';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.1;
+
+    if(btnElement) {
+        btnElement.classList.add('playing');
+        utterance.onend = () => btnElement.classList.remove('playing');
+        utterance.onerror = () => btnElement.classList.remove('playing');
     }
-    if(currentTTSBtn===btn){currentTTS=null;currentTTSBtn=null;return;}
-  }
-  
-  const cleanText=text.replace(/[✨🌸🙏💛🧠📋🎙🔴📸📄🌐💬]/gu,'').trim();
-  const utt=new SpeechSynthesisUtterance(cleanText);
-  utt.lang='hi-IN';utt.rate=0.9;utt.pitch=1.05;utt.volume=1;
-  
-  const voices=speechSynthesis.getVoices();
-  const hiVoice=voices.find(v=>v.lang==='hi-IN')||voices.find(v=>v.lang.startsWith('hi'))||null;
-  if(hiVoice) utt.voice=hiVoice;
-  
-  utt.onstart=()=>{
-    btn.innerHTML='⏹ Ruk jao <span class="tts-waves"><span></span><span></span><span></span><span></span><span></span></span>';
-    btn.classList.add('playing');
-    currentTTS=utt;currentTTSBtn=btn;
-  };
-  utt.onend=utt.onerror=()=>{
-    btn.innerHTML='🔊 Awaaz mein suno';
-    btn.classList.remove('playing');
-    currentTTS=null;currentTTSBtn=null;
-  };
-  speechSynthesis.speak(utt);
+
+    synth.speak(utterance);
 }
 
-// ── SIDEBAR ───────────────────────────────────────────────────────────────────
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('s-overlay').classList.add('open');
-  loadStats();
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('s-overlay').classList.remove('open');
-}
+// --- LIVE MODE ---
+function toggleLive() {
+    const btn = document.getElementById('live-toggle');
+    const ind = document.getElementById('live-ind');
+    btn.classList.toggle('on');
 
-// ── HISTORY ───────────────────────────────────────────────────────────────────
-function openHistory(){
-  document.getElementById('history-panel').classList.add('open');
-  const list=document.getElementById('history-list');
-  list.innerHTML='<div style="color:var(--text3);text-align:center;padding:30px;font-size:14px">Loading...</div>';
-  fetch(`/history?user_id=${userId}`).then(r=>r.json()).then(d=>{
-    if(!d.history||!d.history.length){
-      list.innerHTML='<div style="color:var(--text3);text-align:center;padding:50px 20px;font-size:14px">Abhi koi history nahi hai.<br>Veda se baat karo! 🌸</div>';
-      return;
+    if(btn.classList.contains('on')) {
+        ind.classList.add('show');
+        showToast("Live mode ON: Veda ab bolkar jawab degi!");
+    } else {
+        ind.classList.remove('show');
+        if(synth.speaking) synth.cancel();
+        showToast("Live mode OFF");
     }
-    list.innerHTML='';
-    [...d.history].reverse().forEach(h=>{
-      const div=document.createElement('div');div.className='hi';
-      const modeIcons={chat:'💬',deep:'🧠',creative:'✨',emotional:'💛',task:'📋',vision:'📸',pdf:'📄',search:'🌐'};
-      div.innerHTML=`
-        <div class="hi-u">👤 ${escHtml(h.user||'')}</div>
-        <div class="hi-v">🌸 ${escHtml((h.veda||'').substring(0,150))}${(h.veda||'').length>150?'...':''}</div>
-        <div class="hi-foot">
-          <span class="hi-t">${h.timestamp||''}</span>
-          <span class="hi-mode">${modeIcons[h.mode]||'💬'} ${h.mode||'chat'}</span>
-        </div>`;
-      list.appendChild(div);
-    });
-  }).catch(()=>{list.innerHTML='<div style="color:var(--text3);text-align:center;padding:30px">Load nahi hua 😔</div>'});
 }
 
-function closeHistory(){document.getElementById('history-panel').classList.remove('open')}
-
-function clearHistory(){
-  if(!confirm('Poori history delete karein? Yeh wapas nahi aayegi.'))return;
-  fetch('/clear_history',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({user_id:userId})
-  }).then(()=>{showToast('History saaf ho gayi! ✨');closeSidebar();}).catch(()=>showToast('Error aaya!'));
-}
-
-// ── TOAST ─────────────────────────────────────────────────────────────────────
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
-}
-
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-function escHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-function escAttr(s){
-  return String(s).replace(/'/g,"\\'").replace(/\n/g,' ').substring(0,200);
-}
-
-// ── INPUT AUTO-RESIZE ─────────────────────────────────────────────────────────
-msgInput.addEventListener('input',function(){
-  this.style.height='';this.style.height=Math.min(this.scrollHeight,110)+'px';
-});
-msgInput.addEventListener('keydown',function(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
-});
-
-// Load voices for TTS when ready
-if('speechSynthesis' in window){
-  speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
-  speechSynthesis.getVoices();
+// --- UTILS ---
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
 }
 </script>
 </body>
